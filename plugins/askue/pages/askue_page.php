@@ -1,7 +1,7 @@
 <?php
     require_once(ASKUE_PLUGIN_DIR . "models/DataController.php");
-    require_once(ASKUE_PLUGIN_DIR . "models/Meter.php");
-    require_once(ASKUE_PLUGIN_DIR . "models/EnergyObject.php");
+    //require_once(ASKUE_PLUGIN_DIR . "models/Meter.php");
+    //require_once(ASKUE_PLUGIN_DIR . "models/EnergyObject.php");
 ?>
 
 <?php

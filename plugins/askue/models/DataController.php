@@ -10,6 +10,7 @@ require_once ("MeterType.php");
 require_once ("Meter.php");
 require_once ("EnergyObject.php");
 require_once ("Customer.php");
+require_once ("UserGroup.php");
 
 class DataController
 {
@@ -219,7 +220,7 @@ class DataController
 
         $customers_list = array();
 
-        $select_query = "SELECT Customers.name, user_room_accounts.login FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id";
+        $select_query = "SELECT Customers.name, user_room_accounts.login, Customers.group_id FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id";
 
         $results = $this->get_resultsSQL($select_query);
 
@@ -238,11 +239,40 @@ class DataController
 
         $customer = null;
 
-        $select_query = $this->wpdb->prepare("SELECT Customers.name, user_room_accounts.login FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id WHERE Customers.id = %d", $customerId);
+        $select_query = $this->wpdb->prepare("SELECT Customers.name, user_room_accounts.login, Customers.group_id FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id WHERE Customers.id = %d", $customerId);
         $results = $this->get_rowSQL($select_query);
         if($results) $customer = new Customer($results);
 
         return $customer;
+    }
+
+    // ---------- Получим группы пользователей --------------
+    public function selectUserGroupsList() {
+        $groups_list = array();
+
+        $select_query = "SELECT * FROM UserGroups";
+        $results = $this->get_resultsSQL($select_query);
+
+        if($results != null) {
+            foreach($results as $result_row) {
+                $userGroup = new UserGroup($result_row);
+                $groups_list[] = $userGroup;
+            }
+        }
+
+        return $groups_list;
+    }
+
+    // -------------- Получим гуппу по ID -----------------
+    public function selectUserGroup($group_id) {
+
+        $user_group = null;
+
+        $select_query = $this->wpdb->prepare("SELECT * FROM UserGroups WHERE id = %d", $group_id);
+        $results = $this->get_rowSQL($select_query);
+        if($results) $user_group = new UserGroup($results);
+
+        return $user_group;
     }
 
 
@@ -255,6 +285,7 @@ class DataController
         $this->wpdb->query("DROP TABLE meter_" . $meter_id);
     }
 
+    // --------- Удалим энергетический объект -----------
     public function deleteEnergyObject($energy_object_id) {
 
         $meters_results = $this->get_resultsSQL($this->wpdb->prepare("SELECT id FROM Meters WHERE energyObject_id = %d", $energy_object_id));
@@ -268,5 +299,11 @@ class DataController
 
         $this->wpdb->query($this->wpdb->prepare("DELETE FROM EnergyObjects WHERE id = %d", $energy_object_id));
 
+    }
+
+    // ---------------- Удалим группу ------------------
+    public function deleteGroup($group_id) {
+
+        $this->wpdb->query($this->wpdb->prepare("DELETE FROM UserGroups WHERE id = %d", $group_id));
     }
 }

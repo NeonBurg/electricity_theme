@@ -30,11 +30,15 @@ class askue
         add_submenu_page( null, 'Добавить счетчик', 'Добавить счетчик', 'manage_options', 'add_meter', array('askue', 'add_meter_onclick') );
         add_submenu_page( null, 'Добавить объект', 'Добавить объект', 'manage_options', 'add_energy_object', array('askue', 'add_energy_object_onclick') );
         add_submenu_page( null, 'Добавить тип счетчика', 'Добавить тип счетчика', 'manage_options', 'add_meter_type', array('askue', 'add_meter_type_onclick') );
+        add_submenu_page( null, 'Добавить группу пользователей', 'Добавить группу пользователей', 'manage_options', 'add_user_group', array('askue', 'add_user_group_onclick') );
+
+        add_submenu_page( 'askue_menu', 'Пользователи', 'Пользователи', 'manage_options', 'accounts_manage', array('askue', 'accounts_management_onclick') );
     }
 
     public static function admin_init_func() {
         wp_register_script('donetype_script', get_template_directory_uri(). '/assets/js/donetype_script.js', array(), null, true);
         wp_register_script('add_meter_ajax', plugins_url('assets/js/add_meter_ajax.js', __FILE__), array(), null, true);
+        wp_register_script('add_user_group_ajax', plugins_url('assets/js/add_user_group_ajax.js', __FILE__), array(), null, true);
     }
 
     // -------------------- other functions ---------------------
@@ -53,6 +57,14 @@ class askue
 
     static function add_meter_type_onclick() {
         include("pages/add_meter_type/add_meter_type_page.php");
+    }
+
+    static function accounts_management_onclick() {
+        include("pages/accounts_manage/accounts_manage_page.php");
+    }
+
+    static function add_user_group_onclick() {
+        include("pages/accounts_manage/add_group/add_group_page.php");
     }
 
 }

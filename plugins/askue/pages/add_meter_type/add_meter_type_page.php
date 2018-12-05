@@ -167,7 +167,7 @@
                 <!---------------- Name input ---------------->
                 <tr><th>
                         Название:
-                    </th></tr>
+                </th></tr>
 
                 <tr><td>
                         <!-- Error message box -->

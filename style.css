@@ -129,8 +129,10 @@ ul.custom-menu-class li.current-menu-item > a {
 /*------------ left menu -----------*/
 
 .left_menu_container {
-	padding-right:20px;
+	/*padding-right:20px;*/
 	border:0px solid;
+	display: inline-block;
+	min-width: 300px;
 }
 
 ul.custom_left_menu {
@@ -206,6 +208,13 @@ ul.custom_left_menu li.current-menu-item > a:hover {
 
 
 /* -------======= User room styles =======------- */
+
+.user-room-content {
+	display: block;
+	padding: 0 20px;
+}
+
+/*-------- login form styles -------*/
 .login_line {
 	width:500px;
 	height:2px;
@@ -217,8 +226,6 @@ ul.custom_left_menu li.current-menu-item > a:hover {
 	height:45px;
 	background: #e9e9e9;
 }
-
-/*-------- login form styles -------*/
 
 .login_title {
 	font-size:20px;

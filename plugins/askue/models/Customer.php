@@ -13,11 +13,13 @@ class Customer
     private $phone;
     private $email;
     private $login;
+    private $group_id;
 
     public function __construct($row_data)
     {
         $this->setLogin($row_data->login);
         $this->setName($row_data->name);
+        $this->setGroupId($row_data->group_id);
     }
 
     /* ---------------- СЕТТЕРЫ ---------------- */
@@ -31,6 +33,10 @@ class Customer
         $this->name = $name;
     }
 
+    public function setGroupId($group_id) {
+        $this->group_id = $group_id;
+    }
+
 
     /* --------------- ГЕТТЕРЫ --------------- */
     public function getLogin()
@@ -41,5 +47,9 @@ class Customer
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getGroupId() {
+        return $this->group_id;
     }
 }

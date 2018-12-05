@@ -7,8 +7,8 @@
  */
 
 require_once(ASKUE_PLUGIN_DIR . "models/DataController.php");
-require_once(ASKUE_PLUGIN_DIR . "models/MeterType.php");
-require_once(ASKUE_PLUGIN_DIR . "models/EnergyObject.php");
+//require_once(ASKUE_PLUGIN_DIR . "models/MeterType.php");
+//require_once(ASKUE_PLUGIN_DIR . "models/EnergyObject.php");
 
 global $wpdb;
 $dataController = new DataController($wpdb);
@@ -19,14 +19,14 @@ $edit_meter = null;
 $edit_meter_object_name = null;
 $edit_meter_type = null;
 
+
 if(isset($_GET["edit"])) {
-    require_once(ASKUE_PLUGIN_DIR . "models/Meter.php");
+    //require_once(ASKUE_PLUGIN_DIR . "models/Meter.php");
     $meter_id = $_GET["edit"];
     $edit_meter = $dataController->selectMeter($meter_id);
     $edit_meter_object_name = $dataController->selectEnergyObject($edit_meter->getEnergyObjectId());
     $edit_meter_type = $dataController->selectMeterType($edit_meter->getMeterTypeId());
 }
-
 ?>
 
 <?php wp_enqueue_script('donetype_script'); ?>

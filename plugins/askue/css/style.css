@@ -273,3 +273,34 @@ Text Domain: elegant
     background:url(../assets/images/delete_button_active.png);
     cursor:pointer;
 }
+
+/* ------------ accounts management styles ------------ */
+.groups_container {
+    background-color: white;
+    width:50%;
+    padding:10px 0;
+}
+
+.block_title {
+    font-size: 14pt;
+    font-weight: 700;
+    padding: 0 10px;
+}
+
+.groups_content {
+    margin: 10px 0;
+}
+
+.group_row {
+    padding: 5px 10px;
+}
+
+.group_row:hover {
+    background-color: #eaeaea;
+}
+
+.add_group_button_wrap {
+    display:inline-block;
+    float:right;
+    margin: 0 10px;
+}
