@@ -221,6 +221,11 @@ Text Domain: elegant
     width:100%;
     padding-top: 15px;
 }
+
+.req_field {
+    display:inline-block;
+    color: red;
+}
 /*----------------------------------------*/
 
 .test_img {
@@ -303,4 +308,11 @@ Text Domain: elegant
     display:inline-block;
     float:right;
     margin: 0 10px;
+}
+
+.accounts_container {
+    width:100%;
+    background-color: white;
+    margin-top:20px;
+    padding:10px 0;
 }

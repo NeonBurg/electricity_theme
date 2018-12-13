@@ -13,4 +13,6 @@ $dataController = new DataController($wpdb);
 
     <?php include("groups_table.php"); ?>
 
+    <?php include("accounts_table.php"); ?>
+
 </div>

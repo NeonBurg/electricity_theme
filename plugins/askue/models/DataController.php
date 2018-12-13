@@ -220,7 +220,7 @@ class DataController
 
         $customers_list = array();
 
-        $select_query = "SELECT Customers.name, user_room_accounts.login, Customers.group_id FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id";
+        $select_query = "SELECT Customers.*, user_room_accounts.login FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id";
 
         $results = $this->get_resultsSQL($select_query);
 
@@ -239,7 +239,7 @@ class DataController
 
         $customer = null;
 
-        $select_query = $this->wpdb->prepare("SELECT Customers.name, user_room_accounts.login, Customers.group_id FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id WHERE Customers.id = %d", $customerId);
+        $select_query = $this->wpdb->prepare("SELECT Customers.*, user_room_accounts.login FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id WHERE Customers.id = %d", $customerId);
         $results = $this->get_rowSQL($select_query);
         if($results) $customer = new Customer($results);
 
@@ -256,7 +256,7 @@ class DataController
         if($results != null) {
             foreach($results as $result_row) {
                 $userGroup = new UserGroup($result_row);
-                $groups_list[] = $userGroup;
+                $groups_list[$userGroup->getId()] = $userGroup;
             }
         }
 
@@ -299,6 +299,20 @@ class DataController
 
         $this->wpdb->query($this->wpdb->prepare("DELETE FROM EnergyObjects WHERE id = %d", $energy_object_id));
 
+    }
+
+    // ---------------- Удалим пользователя ------------------
+    public function deleteUser($customer_id) {
+
+        $account_id = $this->get_varSQL($this->wpdb->prepare("SELECT account_id FROM Customers WHERE id = %d", $customer_id));
+
+        if(!empty($account_id)) {
+            $this->wpdb->query($this->wpdb->prepare("DELETE FROM Customers WHERE id = %d", $customer_id));
+            $this->wpdb->query($this->wpdb->prepare("DELETE FROM user_room_accounts WHERE id = %d", $account_id));
+        }
+        else {
+            return array("SQL Ошибка удаления пользователя");
+        }
     }
 
     // ---------------- Удалим группу ------------------

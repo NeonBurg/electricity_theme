@@ -8,7 +8,7 @@
 
 //if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $password = strip_tags(trim($_POST["pass_input"]));
+    $password = strip_tags(trim($_POST["password_input"]));
     $password = str_replace(array("\r", "\n"), array(" ", " "), $password);
 
     /* --------------------========= Проверка пароля ==========-------------------- */

@@ -43,16 +43,16 @@ require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
 
         // Проверяем уникальность логина в БД
 
-        $result = $wpdb->get_results("SELECT login FROM user_room_accounts WHERE login = '".$login."'");
+        if(!isset($_POST["edit_user_login"]) || strcmp($_POST["edit_user_login"], $login) !== 0) {
+            $result = $wpdb->get_results("SELECT login FROM user_room_accounts WHERE login = '" . $login . "'");
 
-        if($result)
-        {
-            http_response_code(400);
-            echo "Пользователь с таким логином уже существует";
-            exit;
-        }
-        else {
-            //http_response_code(200);
+            if ($result) {
+                http_response_code(400);
+                echo "Пользователь с таким логином уже существует";
+                exit;
+            } else {
+                //http_response_code(200);
+            }
         }
     }
     else {
