@@ -23,6 +23,8 @@ jQuery(document).ready(function($) {
     var network_address_error_message = $('#network_address_error_message');
 
     var counterKeys = 0;
+    var meterTypeInputOldVal = '';
+    var energyObjectInputOldVal = '';
 
     var success_fields = [false, false, false, false, false];
     if(document.getElementById("edit_meter_name")) for(var i=0; i<success_fields.length; i++) success_fields[i] = true;
@@ -78,6 +80,32 @@ jQuery(document).ready(function($) {
         }
     });
 
+    $(meterTypeInput).on('click', function() {
+        meterTypeInputOldVal = $(meterTypeInput).val();
+        //console.log('meterTypeInput.click(): value = ' + $(meterTypeInput).val());
+        $(meterTypeInput).val("");
+    });
+
+    $(meterTypeInput).focusout(function() {
+        //console.log('meterTypeInput.focusout() called;');
+        if($(meterTypeInput).val().length === 0 && meterTypeInputOldVal.length !== 0) {
+            $(meterTypeInput).val(meterTypeInputOldVal);
+        }
+    });
+
+    $(energyObjectInput).on('click', function() {
+        energyObjectInputOldVal = $(energyObjectInput).val();
+        //console.log('energyObjectInput.click(): value = ' + $(energyObjectInput).val());
+        $(energyObjectInput).val("");
+    });
+
+    $(energyObjectInput).focusout(function() {
+        //console.log('energyObjectInput.focusout() called;');
+        if($(energyObjectInput).val().length === 0 && energyObjectInputOldVal.length !== 0) {
+            $(energyObjectInput).val(energyObjectInputOldVal);
+        }
+    });
+
     $(meterNameInput).donetyping(donetypingName);
     $(meterNumInput).donetyping(donetypingMeterNum);
     $(energyObjectInput).donetyping(donetypingEnergyObject);
@@ -100,7 +128,8 @@ jQuery(document).ready(function($) {
             makeAjaxPost(0, "../../wp-content/plugins/askue/pages/add_meter/check_name.php", $form_data, name_error_message, name_status_icon);
         }*/
 
-        makeAjaxPost(0, "../../wp-content/plugins/askue/pages/add_meter/check_name.php", $form_data, name_error_message, name_status_icon);
+        //makeAjaxPost(0, "../../wp-content/plugins/askue/pages/add_meter/check_name.php", $form_data, name_error_message, name_status_icon);
+        makeAjaxPost(0, myScript.askue_plugin_url + "/askue/pages/add_meter/check_name.php", $form_data, name_error_message, name_status_icon);
         counterKeys = 0;
     }
 
@@ -119,7 +148,8 @@ jQuery(document).ready(function($) {
             makeAjaxPost(1, "../../wp-content/plugins/askue/pages/add_meter/check_meter_num.php", $form_data, meter_num_error_message, meter_num_status_icon);
         }*/
 
-        makeAjaxPost(1, "../../wp-content/plugins/askue/pages/add_meter/check_meter_num.php", $form_data, meter_num_error_message, meter_num_status_icon);
+        //makeAjaxPost(1, "../../wp-content/plugins/askue/pages/add_meter/check_meter_num.php", $form_data, meter_num_error_message, meter_num_status_icon);
+        makeAjaxPost(1, myScript.askue_plugin_url + "/askue/pages/add_meter/check_meter_num.php", $form_data, meter_num_error_message, meter_num_status_icon);
         counterKeys = 0;
     }
 
@@ -127,7 +157,8 @@ jQuery(document).ready(function($) {
     function donetypingEnergyObject() {
 
         $form_data = {'energy_object_input' : $('#energy_object_input').val()};
-        makeAjaxPost(2, "../../wp-content/plugins/askue/pages/add_meter/check_object.php", $form_data, energy_object_error_message, energy_object_status_icon);
+        //makeAjaxPost(2, "../../wp-content/plugins/askue/pages/add_meter/check_object.php", $form_data, energy_object_error_message, energy_object_status_icon);
+        makeAjaxPost(2, myScript.askue_plugin_url + "/askue/pages/add_meter/check_object.php", $form_data, energy_object_error_message, energy_object_status_icon);
         counterKeys = 0;
     }
 
@@ -135,7 +166,8 @@ jQuery(document).ready(function($) {
     function donetypingMeterType() {
 
         $form_data = {'meter_type_input' : $('#meter_type_input').val()};
-        makeAjaxPost(3, "../../wp-content/plugins/askue/pages/add_meter/check_meter_type.php", $form_data, meter_type_error_message, meter_type_status_icon);
+        //makeAjaxPost(3, "../../wp-content/plugins/askue/pages/add_meter/check_meter_type.php", $form_data, meter_type_error_message, meter_type_status_icon);
+        makeAjaxPost(3, myScript.askue_plugin_url + "/askue/pages/add_meter/check_meter_type.php", $form_data, meter_type_error_message, meter_type_status_icon);
         counterKeys = 0;
     }
 
@@ -154,7 +186,8 @@ jQuery(document).ready(function($) {
             makeAjaxPost(4, "../../wp-content/plugins/askue/pages/add_meter/check_network_address.php", $form_data, network_address_error_message, network_address_status_icon);
         }*/
 
-        makeAjaxPost(4, "../../wp-content/plugins/askue/pages/add_meter/check_network_address.php", $form_data, network_address_error_message, network_address_status_icon);
+        //makeAjaxPost(4, "../../wp-content/plugins/askue/pages/add_meter/check_network_address.php", $form_data, network_address_error_message, network_address_status_icon);
+        makeAjaxPost(4, myScript.askue_plugin_url + "/askue/pages/add_meter/check_network_address.php", $form_data, network_address_error_message, network_address_status_icon);
         counterKeys = 0;
     }
 
@@ -197,11 +230,17 @@ jQuery(document).ready(function($) {
 
         $.ajax({
             type: 'POST',
-            url: "../../wp-content/plugins/askue/pages/add_meter/final_check.php",
+            //url: "../../wp-content/plugins/askue/pages/add_meter/final_check.php",
+            url: myScript.askue_plugin_url + "/askue/pages/add_meter/final_check.php",
             data: formData
         }).done(function(response) {
             //console.log(response);
-            window.location.replace("/wp-admin/admin.php?page=askue_menu");
+            if(myScript.is_admin) {
+                window.location.replace("/wp-admin/admin.php?page=askue_menu");
+            }
+            else {
+                window.location.replace("/user-room/meters-management/");
+            }
         }).fail(function(data) {
             console.log('add meter error!');
             if (data.responseText !== '') {

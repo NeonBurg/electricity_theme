@@ -3,39 +3,15 @@
     $userGroupsList = $dataController->selectUserGroupsList();
 ?>
 
-<script type="text/javascript">
-    function delete_user(user_id, user_name) {
-        if (confirm("Удалить пользователя: '" + user_name + "' ?")) {
-            console.log('delete user: id = ' + user_id);
-            $form_data = {'user_id': user_id};
-            $form_action = '<?=plugins_url("/add_user/delete_user.php", __FILE__);?>';
-            makeDeleteAjax($form_action, $form_data);
-        }
-        else {
-            console.log('cancel delete user');
-        }
-    }
-
-    function makeDeleteAjax(action, form_data) {
-        jQuery.ajax({
-            type: 'POST',
-            url: action,
-            data: form_data
-        }).done(function (response) {
-            //console.log(response);
-            location.reload(); // Обновляем страницу после удаления
-        }).fail(function (data) {
-            console.log('delete error!');
-            if (data.responseText !== '') {
-                console.log('response: ' + data.responseText);
-            }
-        });
-    }
-</script>
-
 <div class="accounts_container">
-    <div class="block_title">Список пользователей</div>
     <div class="groups_content">
+    <?php if(!is_admin()):?>
+        <div class="block_title_user_room">
+    <?php endif;?>
+            <div class="block_title">Список пользователей</div>
+     <?php if(!is_admin()):?>
+        </div><div class="user_room_block_border">
+    <?php endif;?>
         <?php if(count($accountsList) > 0): ?>
 
             <table class="energy-object-table" cellpadding="0" cellspacing="0">
@@ -44,7 +20,9 @@
                     <th>Логин</th>
                     <th width="33%">Email</th>
                     <th>Группа</th>
+                    <?php if($access_level == 3): ?>
                     <th width="6%"></th>
+                    <?php endif; ?>
                 </tr>
 
                 <?php foreach ($accountsList as $account):?>
@@ -54,23 +32,34 @@
                         <td><?=$account->getLogin();?></td>
                         <td><?php if($account->getEmail()) echo $account->getEmail(); else echo "null"; ?></td>
                         <td><?php if($account->getGroupId()) echo $userGroupsList[$account->getGroupId()]->getName(); else echo "null"; ?></td>
+                        <?php if($access_level == 3): ?>
                         <td>
                             <div style="padding-top:6px;">
                                 <div style="display: inline-block;">
-                                    <div class="edit-button" onclick="location.href='/wp-admin/admin.php?page=add_user&edit=<?=$account->getId();?>'"></div>
+                                    <?php if(is_admin()): ?>
+                                        <div class="edit-button" onclick="location.href='/wp-admin/admin.php?page=add_user&edit=<?=$account->getId();?>'"></div>
+                                    <?php else: ?>
+                                        <div class="edit-button" onclick="location.href='/user-room/accounts_management/add-user?edit=<?=$account->getId();?>'"></div>
+                                    <?php endif; ?>
                                 </div>
                                 <div style="display: inline-block; padding-left:5px;">
                                     <div class="delete-button" onclick="delete_user(<?=$account->getId();?>, '<?=$account->getLogin();?>')"></div>
                                 </div>
                             </div>
                         </td>
+                        <?php endif; ?>
                     </tr>
 
                 <?php endforeach;?>
             </table>
+<?php else:?>
+    Пустой список групп
+<?php endif; ?>
     </div>
-        <?php else:?>
-            Пустой список пользователей
-        <?php endif; ?>
-<div style="width:100%; display: inline-block;"><div class="add_group_button_wrap"><div class="askue-button" onclick="location.href='/wp-admin/admin.php?page=add_user';">Добавить пользователя</div></div></div>
+<?php if(!is_admin()):?>
+    </div>
+<?php endif;?>
+    <?php if($access_level == 3): ?>
+        <div style="width:100%; display: inline-block;"><div class="add_group_button_wrap"><div class="askue-button" onclick="<?php if(is_admin()) echo "location.href='/wp-admin/admin.php?page=add_user'"; else echo "location.href='/user-room/accounts-management/add-user'"; ?>">Добавить пользователя</div></div></div>
+    <?php endif; ?>
 </div>

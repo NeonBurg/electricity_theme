@@ -9,50 +9,18 @@
 
     global $wpdb;
     $dataController = new DataController($wpdb);
-    $energyObjectsList = $dataController->selectEnergyObjectsForAccount($account_id);
+    if($access_level == 2 || $access_level == 3) {
+        $energyObjectsList = $dataController->selectEnergyObjects();
+    }
+    else if($access_level == 1) {
+        $energyObjectsList = $dataController->selectEnergyObjectsForAccount($account_id);
+    }
 ?>
 
+<?php //echo "access_level = ".$access_level;?>
 
-    <!--<div class="energy-object-top">
-        <div class="energy-object-title">ТП 76</div>
-    </div>-->
+<?php include(ASKUE_PLUGIN_DIR."pages/manage_buttons_table.php"); ?>
 
-<?php foreach ($energyObjectsList as $energyObject): ?>
-
-    <div class="energy-object-top">
-        <div class="energy-object-title"><?=$energyObject->getName();?></div>
-    </div>
-
-    <div class="energy-object-content">
-        <table class="energy-object-table" cellpadding="0" cellspacing="0">
-            <tr>
-                <th width="33%" style="text-align:left; padding-left:50px;">Название</th>
-                <th>Счетчик №</th>
-                <th width="33%" style="text-align:right; padding-right:50px;">Потребление (Кв/ч)</th>
-            </tr>
-
-            <?php foreach ($energyObject->getMetersList() as $meter): ?>
-
-                <tr>
-                    <td style="text-align:left; padding-left:50px;"><?=$meter->getName();?></td>
-                    <td><?=$meter->getNum();?></td>
-                    <td style="text-align:right; padding-right:50px;"><?php $rand_num = 30000/rand(20, 50); echo number_format ($rand_num, 3); ?></td>
-                </tr>
-
-            <?php endforeach; ?>
-        </table>
-
-        <?php if(count($energyObject->getMetersList()) == 0): ?>
-            <table class="empty-list-notif-table" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td>Пустой список счетчиков</td>
-                </tr>
-            </table>
-        <?php endif; ?>
-    </div>
-
-    <div class="energy-object-separator">&nbsp;</div>
-
-<?php endforeach; ?>
+<?php include(ASKUE_PLUGIN_DIR."pages/meters_table.php") ?>
 
 <?php include ($_SERVER['DOCUMENT_ROOT'] . "/user_room/parts/content_footer.php");?>

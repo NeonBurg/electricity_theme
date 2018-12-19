@@ -6,9 +6,14 @@ function wpb_custom_new_menu() {
 add_action( 'init', 'wpb_custom_new_menu' );
 
 function wpb_left_menu() {
-    register_nav_menu('custom-left-menu', __('Left Custom Menu'));
+    register_nav_menu('custom-left-admin-menu', __('Left Custom Admin Menu'));
 }
 add_action('init', 'wpb_left_menu');
+
+function wpb_left_user_menu() {
+    register_nav_menu('custom-left-user-menu', __('Left Custom User Menu'));
+}
+add_action('init', 'wpb_left_user_menu');
 
 
 add_theme_support( 'post-thumbnails' );
@@ -29,5 +34,32 @@ function themeslug_enqueue_style() {
 }
 
 add_action('wp_enqueue_scripts', 'themeslug_enqueue_style');
+
+function be_menu_item_classes( $classes, $item) {
+    $current_url = current_url();
+
+    if (strstr($current_url, $item->url) && strstr($current_url, '/user-room/')) {
+        if (strstr($item->url, '/accoutns-management/') || strstr($item->url, '/meters-management/'))
+            $classes[] = 'current-menu-item';
+    }
+
+    return array_unique( $classes );
+}
+
+add_filter( 'nav_menu_css_class', 'be_menu_item_classes', 10, 2 );
+
+function current_url() {
+
+    // Protocol
+    $url = ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ) ? 'https://' : 'http://';
+    // Server
+    $url .= $_SERVER['SERVER_NAME'];
+    // Port
+    $url .= ( '80' == $_SERVER['SERVER_PORT'] ) ? '' : ':' . $_SERVER['SERVER_PORT'];
+    // URI
+    $url .= $_SERVER['REQUEST_URI'];
+
+    return trailingslashit( $url );
+}
 
 ?>

@@ -1,3 +1,4 @@
+<?php if($access_level == 3 || is_admin()):?>
 <?php
 require_once(ASKUE_PLUGIN_DIR . "models/DataController.php");
 
@@ -18,10 +19,10 @@ if(isset($_GET["edit"])) {
 <?php wp_enqueue_script('donetype_script'); ?>
 <?php wp_enqueue_script('add_user_ajax'); ?>
 
-<h1>
+<div class="edit-title">
     <?php if($edit_user) echo "АСКУЭ » Редактирование пользователя: '".$edit_user->getLogin()."'";
     else echo "АСКУЭ » Добавление пользователя"?>
-</h1>
+</div>
 
 <div class="askue-admin-content">
 
@@ -259,3 +260,6 @@ if(isset($_GET["edit"])) {
     </form>
 
 </div>
+<?php else: ?>
+    <div class="edit-title">Нет доступа к данной странице</div>
+<?php endif; ?>

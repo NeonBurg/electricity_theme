@@ -22,7 +22,6 @@ $(function() {
 });
 
 $(document).ready(function() {
-    $('.menu-container').css('background-color', '#b5b5b5');
     top_offset = $('.page').offset().top;
     checkScroll();
 });

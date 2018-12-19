@@ -15,18 +15,28 @@ global $wpdb;
 
 if($wpdb) {
 
-    $sql_insert_object = $wpdb->prepare("INSERT INTO EnergyObjects(name, address, customer_id) VALUES('%s', '%s', %d)", $object_name, $object_address, $account_id);
-    $wpdb->query($sql_insert_object);
+    if(isset($_POST["edit_energy_object_name"])) {
 
-    $result = $wpdb->get_row($wpdb->prepare("SELECT * FROM EnergyObjects WHERE name = '%s'", $object_name));
+        $edit_energy_object_id = $_POST["edit_energy_object_id"];
+        $sql_update_meter = $wpdb->prepare("UPDATE EnergyObjects SET name=%s, address=%s, customer_id=%d WHERE id = %d", $object_name, $object_address, $customer_id, $edit_energy_object_id);
+        $wpdb->query($sql_update_meter);
 
-    if ($result) {
         http_response_code(200);
     }
     else {
-        http_response_code(400);
-        echo "Ошибка mysql";
-        exit;
+
+        $sql_insert_object = $wpdb->prepare("INSERT INTO EnergyObjects(name, address, customer_id) VALUES('%s', '%s', %d)", $object_name, $object_address, $customer_id);
+        $wpdb->query($sql_insert_object);
+
+        $result = $wpdb->get_row($wpdb->prepare("SELECT * FROM EnergyObjects WHERE name = '%s'", $object_name));
+
+        if ($result) {
+            http_response_code(200);
+        } else {
+            http_response_code(400);
+            echo "Ошибка mysql";
+            exit;
+        }
     }
 
 }

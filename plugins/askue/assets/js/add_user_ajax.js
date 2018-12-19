@@ -36,9 +36,10 @@ jQuery(document).ready(function($) {
 
     var counterKeys = 0;
 
-    var success_fields = [false, false, false, false, false, false, false, true, true];
+    var success_fields = [false, false, false, false, false, false, false, true, false];
 
     var edit_user_id = null;
+    var groupInputOldVal = '';
 
     if(document.getElementById("edit_user_id")) {
         for(var i=0; i<success_fields.length; i++) success_fields[i] = true;
@@ -116,6 +117,18 @@ jQuery(document).ready(function($) {
         }
     });
 
+    $(groupInput).on('click', function() {
+        groupInputOldVal = $(groupInput).val();
+        //console.log('energyObjectInput.click(): value = ' + $(energyObjectInput).val());
+        $(groupInput).val("");
+    });
+
+    $(groupInput).focusout(function() {
+        //console.log('energyObjectInput.focusout() called;');
+        if($(groupInput).val().length === 0 && groupInputOldVal.length !== 0) {
+            $(groupInput).val(groupInputOldVal);
+        }
+    });
 
     $(loginInput).donetyping(donetypingLogin);
     $(passwordInput).donetyping(donetypingPassword);
@@ -135,7 +148,8 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(0, "../../user_room/registration/check_login.php", $form_data, login_error_message, login_status_icon);
+        //makeAjaxPost(0, "../../user_room/registration/check_login.php", $form_data, login_error_message, login_status_icon);
+        makeAjaxPost(0, "/user_room/registration/check_login.php", $form_data, login_error_message, login_status_icon);
         counterKeys = 0;
     }
 
@@ -151,9 +165,11 @@ jQuery(document).ready(function($) {
         if(edit_user_id !== null && passwordInput.val().length === 0) {
             password_error_message.text('');
             setIconInvisible(password_status_icon);
+            success_fields[1] = true;
         }
         else {
-            makeAjaxPost(1, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_password.php", $form_data, password_error_message, password_status_icon);
+            //makeAjaxPost(1, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_password.php", $form_data, password_error_message, password_status_icon);
+            makeAjaxPost(1, myScript.askue_plugin_url + "/askue/pages/accounts_manage/add_user/check_password.php", $form_data, password_error_message, password_status_icon);
             success_fields[2] = false;
         }
         counterKeys = 0;
@@ -169,9 +185,11 @@ jQuery(document).ready(function($) {
         if(edit_user_id !== null && passwordInput.val().length === 0 && repeatPasswordInput.val().length === 0) {
             repeat_password_error_message.text('');
             setIconInvisible(repeat_password_status_icon);
+            success_fields[2] = true;
         }
         else {
-            makeAjaxPost(2, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_password_repeat.php", $form_data, repeat_password_error_message, repeat_password_status_icon);
+            //makeAjaxPost(2, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_password_repeat.php", $form_data, repeat_password_error_message, repeat_password_status_icon);
+            makeAjaxPost(2, myScript.askue_plugin_url + "/askue/pages/accounts_manage/add_user/check_password_repeat.php", $form_data, repeat_password_error_message, repeat_password_status_icon);
         }
         counterKeys = 0;
     }
@@ -183,7 +201,8 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(3, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_surname.php", $form_data, surname_error_message, surname_status_icon);
+        //makeAjaxPost(3, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_surname.php", $form_data, surname_error_message, surname_status_icon);
+        makeAjaxPost(3, myScript.askue_plugin_url + "/askue/pages/accounts_manage/add_user/check_surname.php", $form_data, surname_error_message, surname_status_icon);
         counterKeys = 0;
     }
 
@@ -194,7 +213,8 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(4, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_name.php", $form_data, name_error_message, name_status_icon);
+        //makeAjaxPost(4, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_name.php", $form_data, name_error_message, name_status_icon);
+        makeAjaxPost(4, myScript.askue_plugin_url + "/askue/pages/accounts_manage/add_user/check_name.php", $form_data, name_error_message, name_status_icon);
         counterKeys = 0;
     }
 
@@ -205,7 +225,8 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(5, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_patronymic.php", $form_data, patronymic_error_message, patronymic_status_icon);
+        //makeAjaxPost(5, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_patronymic.php", $form_data, patronymic_error_message, patronymic_status_icon);
+        makeAjaxPost(5, myScript.askue_plugin_url + "/askue/pages/accounts_manage/add_user/check_patronymic.php", $form_data, patronymic_error_message, patronymic_status_icon);
         counterKeys = 0;
     }
 
@@ -216,7 +237,8 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(6, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_group.php", $form_data, group_error_message, group_status_icon);
+        //makeAjaxPost(6, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_group.php", $form_data, group_error_message, group_status_icon);
+        makeAjaxPost(6, myScript.askue_plugin_url + "/askue/pages/accounts_manage/add_user/check_group.php", $form_data, group_error_message, group_status_icon);
         counterKeys = 0;
     }
 
@@ -227,7 +249,8 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(7, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_phone.php", $form_data, phone_error_message, phone_status_icon);
+        //makeAjaxPost(7, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_phone.php", $form_data, phone_error_message, phone_status_icon);
+        makeAjaxPost(7, myScript.askue_plugin_url + "/askue/pages/accounts_manage/add_user/check_phone.php", $form_data, phone_error_message, phone_status_icon);
         counterKeys = 0;
     }
 
@@ -238,7 +261,8 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(8, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_email.php", $form_data, email_error_message, email_status_icon);
+        //makeAjaxPost(8, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_email.php", $form_data, email_error_message, email_status_icon);
+        makeAjaxPost(8, myScript.askue_plugin_url + "/askue/pages/accounts_manage/add_user/check_email.php", $form_data, email_error_message, email_status_icon);
         counterKeys = 0;
     }
 
@@ -259,6 +283,7 @@ jQuery(document).ready(function($) {
         event.preventDefault();
 
         var send_registration = true;
+        checkAllFields();
 
         jQuery.each(success_fields, function(index, item) {
             if(!item) send_registration = false;
@@ -277,12 +302,18 @@ jQuery(document).ready(function($) {
 
         $.ajax({
             type: 'POST',
-            url: '../../wp-content/plugins/askue/pages/accounts_manage/add_user/final_check.php',
+            //url: '../../wp-content/plugins/askue/pages/accounts_manage/add_user/final_check.php',
+            url: myScript.askue_plugin_url + "/askue/pages/accounts_manage/add_user/final_check.php",
             data: formData
         }).done(function(response) {
-            console.log('registration success');
-            console.log(response);
-            window.location.replace("/wp-admin/admin.php?page=accounts_manage");
+            //console.log('registration success');
+            //console.log(response);
+            if(myScript.is_admin) {
+                window.location.replace("/wp-admin/admin.php?page=accounts_manage");
+            }
+            else {
+                window.location.replace("/user-room/accoutns-management/");
+            }
 
         }).fail(function(data) {
             console.log('registration error!');

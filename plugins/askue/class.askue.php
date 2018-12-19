@@ -15,10 +15,15 @@ class askue
 
         add_action('admin_init', array('askue', 'admin_init_func'));
 
-        wp_enqueue_style('askue_style', plugins_url('css/style.css',__FILE__), array(), null, 'all');
+        //wp_enqueue_style('askue_style', plugins_url('css/askue-style.css',__FILE__), array(), null, 'all');
+        add_action( 'wp_enqueue_scripts', array( __CLASS__, 'admin_init_func' ));
+        add_action( 'admin_head', array( __CLASS__, 'body_css' ) );
+
+        //add_filter( 'nav_menu_css_class', array( __CLASS__,'be_menu_item_classes'), 10, 3 );
         //wp_enqueue_script('test_form_script', plugins_url('test_form_script.js',__FILE__), array(), null, 'all');
         //wp_register_script('donetype_script', plugins_url('donetype_script.js', __FILE__), array(), null, true);
     }
+
 
     // -------------------- action_hooks ------------------------
 
@@ -37,10 +42,24 @@ class askue
     }
 
     public static function admin_init_func() {
+        wp_enqueue_style('askue_style', plugins_url('css/askue-style.css',__FILE__), array(), null, 'all');
+
         wp_register_script('donetype_script', get_template_directory_uri(). '/assets/js/donetype_script.js', array(), null, true);
         wp_register_script('add_meter_ajax', plugins_url('assets/js/add_meter_ajax.js', __FILE__), array(), null, true);
+        wp_register_script('add_energy_object_ajax', plugins_url('assets/js/add_energy_object_ajax.js', __FILE__), array(), null, true);
+        wp_register_script('add_meter_type_ajax', plugins_url('assets/js/add_meter_type_ajax.js', __FILE__), array(), null, true);
         wp_register_script('add_user_group_ajax', plugins_url('assets/js/add_user_group_ajax.js', __FILE__), array(), null, true);
         wp_register_script('add_user_ajax', plugins_url('assets/js/add_user_ajax.js', __FILE__), array(), null, true);
+        wp_register_script('delete_ajax', plugins_url('assets/js/delete_ajax.js', __FILE__), array(), null, true);
+
+        wp_localize_script('donetype_script', 'myScript', array(
+            'askue_plugin_url' => plugins_url(),
+            'is_admin' => is_admin()
+        ));
+
+        wp_localize_script('delete_ajax', 'myScript', array(
+            'askue_plugin_url' => plugins_url()
+        ));
     }
 
     // -------------------- other functions ---------------------
@@ -73,4 +92,20 @@ class askue
         include("pages/accounts_manage/add_user/add_user_page.php");
     }
 
+    static function body_css() {
+        // This makes sure that the positioning is also good for right-to-left languages
+        $x = is_rtl() ? 'left' : 'right';
+
+        echo "
+    <style type='text/css'>
+        body {
+            padding-right:20px;
+        }
+    </style>
+        ";
+    }
+
+    /*public static function be_menu_item_classes( $classes, $item, $args ) {
+        $classes[] = 'current-menu-item';
+    }*/
 }

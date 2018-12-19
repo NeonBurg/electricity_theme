@@ -7,10 +7,12 @@ global $wpdb;
 
 if($wpdb) {
 
+    $access_level = $_POST["access_level_select"];
+
     if(isset($_POST["edit_group_name"])) {
         $edit_group_id = $_POST["edit_group_id"];
 
-        $sql_update_group = $wpdb->prepare("UPDATE UserGroups SET name=%s WHERE id = %d", $group_name, $edit_group_id);
+        $sql_update_group = $wpdb->prepare("UPDATE UserGroups SET name=%s, access_level=%d WHERE id = %d", $group_name, $access_level, $edit_group_id);
         $wpdb->query($sql_update_group);
 
         $result = $wpdb->get_row($wpdb->prepare("SELECT * FROM UserGroups WHERE id = %d", $edit_group_id));
@@ -25,7 +27,7 @@ if($wpdb) {
     }
     else {
 
-        $sql_insert_group = $wpdb->prepare("INSERT INTO UserGroups(name) VALUES('%s')", $group_name);
+        $sql_insert_group = $wpdb->prepare("INSERT INTO UserGroups(name, access_level) VALUES('%s', %d)", $group_name, $access_level);
         $wpdb->query($sql_insert_group);
 
         $result = $wpdb->get_row("SELECT id FROM Meters ORDER BY id DESC LIMIT 1");

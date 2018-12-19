@@ -17,4 +17,5 @@ require_once( ASKUE_PLUGIN_DIR . 'class.askue.php' );
 
 add_action('init', array('askue', 'init'));
 
+
 ?>

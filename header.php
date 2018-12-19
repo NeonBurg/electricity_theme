@@ -15,11 +15,11 @@
 ?><!DOCTYPE html>
 
 <?php
-global $post;
+/*global $post;
 if(isset($post) && $post->post_type == 'page' && ($post->ID == '10' || $post->ID == '57' || $post->ID == '55')) {
     global $wpdb;
     include( $_SERVER['DOCUMENT_ROOT'] . '/user_room/header_settings.php' );
-}
+}*/
 ?>
 
 <html <?php language_attributes();?>>

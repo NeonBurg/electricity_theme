@@ -5,7 +5,7 @@
 <?php include ($_SERVER['DOCUMENT_ROOT'] . "/user_room/parts/content_head.php");?>
 
     <?php
-        echo "Accounts management content here";
+        include(ASKUE_PLUGIN_DIR."pages/accounts_manage/accounts_manage_page.php");
     ?>
 
 <?php include ($_SERVER['DOCUMENT_ROOT'] . "/user_room/parts/content_footer.php");?>

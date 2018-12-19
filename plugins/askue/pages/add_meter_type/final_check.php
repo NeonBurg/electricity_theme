@@ -7,7 +7,7 @@
  */
 
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
-include(ASKUE_PLUGIN_DIR . "pages/add_meter_type/check_type_name.php");
+include(ASKUE_PLUGIN_DIR . "pages/add_meter_type/check_name.php");
 
 if($wpdb) {
 

@@ -3,25 +3,22 @@
 </script>
 
 <?php   include ($_SERVER['DOCUMENT_ROOT'] . "/user_room/parts/content_head.php");
-        require_once ($_SERVER['DOCUMENT_ROOT'] . "/wp-content/plugins/askue/models/DataController.php");?>
+require_once(ASKUE_PLUGIN_DIR . "models/DataController.php");
 
-    <?php
-        echo "Meters management content here <br><br>";
-        global $wpdb;
-        $dataController = new DataController($wpdb);
-        $meter_types = $dataController->selectMeterTypes();
+$account_id = $_COOKIE["id"];
 
-        //$meter_types = array();
+global $wpdb;
+$dataController = new DataController($wpdb);
+if($access_level == 2 || $access_level == 3) {
+    $energyObjectsList = $dataController->selectEnergyObjects();
+}
+else if($access_level == 1) {
+    $energyObjectsList = $dataController->selectEnergyObjectsForAccount($account_id);
+}
+?>
 
-        if(count($meter_types) != 0) {
-            echo " id | type <br>";
-            foreach ($meter_types as $meter_type) {
-                echo $meter_type->getId() . " | " . $meter_type->getType() . "<br>";
-            }
-        }
-        else {
-            echo "Empty meter_types | err = " . $dataController->getErrorMsg()[0];
-        }
-    ?>
+<?php include(ASKUE_PLUGIN_DIR."pages/manage_buttons_table.php"); ?>
+
+<?php include(ASKUE_PLUGIN_DIR."pages/meters_table.php") ?>
 
 <?php include ($_SERVER['DOCUMENT_ROOT'] . "/user_room/parts/content_footer.php");?>

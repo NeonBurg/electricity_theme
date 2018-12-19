@@ -9,13 +9,20 @@
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/user_room/utils/encrypt.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/user_room/utils/check.php' );
 
+global $wpdb;
+
 if(!$wpdb) {
     //echo "!wpdb";
     header("location: /user_room_page/auth/?err=Отсутсвует соединение с базой данных");
 }
-else if(checkAuth($wpdb) == false) {
-    header("location: /user_room_page/auth/");
+else {
+    $access_level = checkAuth($wpdb);
+    if($access_level == -1) {
+        header("location: /user_room_page/auth/");
+    }
 }
+
+
 
 /*else {
     $check_auth = checkAuth($wpdb);

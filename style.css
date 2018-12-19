@@ -65,11 +65,12 @@ body {
 
 .menu-container {
 	width:100%;
-	background: #ffffff;
+	background-color: #b5b5b5;
 	height: 50px;
 	position:fixed;
 	float:left;
 	top:232px;
+	z-index:1000;
 }
 
 .custom-menu-container {

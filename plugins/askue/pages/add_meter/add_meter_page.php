@@ -1,3 +1,6 @@
+<?php //echo "access_level = ".$access_level; ?>
+<?php if(isset($access_level) && ($access_level == 2 || $access_level == 3) || is_admin()):?>
+
 <?php
 /**
  * Created by PhpStorm.
@@ -32,10 +35,10 @@ if(isset($_GET["edit"])) {
 <?php wp_enqueue_script('donetype_script'); ?>
 <?php wp_enqueue_script('add_meter_ajax'); ?>
 
-<h1>
+<div class="edit-title">
     <?php if($edit_meter) echo "АСКУЭ » Редактирование счетчика: '".$edit_meter->getName()."'";
             else echo "АСКУЭ » Добавление нового счетчика"?>
-</h1>
+</div>
 
 <div class="askue-admin-content">
 
@@ -199,3 +202,6 @@ if(isset($_GET["edit"])) {
     </form>
 
 </div>
+    <?php else: ?>
+    <div class="edit-title">Нет доступа к данной странице</div>
+<?php endif; ?>

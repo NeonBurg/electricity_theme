@@ -1,3 +1,4 @@
+<?php if($access_level == 3 || is_admin()):?>
 <?php
 
 require_once(ASKUE_PLUGIN_DIR . "models/DataController.php");
@@ -17,10 +18,10 @@ if(isset($_GET["edit"])) {
 <?php wp_enqueue_script('add_user_group_ajax'); ?>
 
 
-<h1>
+<div class="edit-title">
     <?php if($edit_group) echo "АСКУЭ » Редактирование группы пользователей: '".$edit_group->getName()."'";
     else echo "АСКУЭ » Добавление группы пользователей"?>
-</h1>
+</div>
 
 <div class="askue-admin-content">
 
@@ -56,6 +57,31 @@ if(isset($_GET["edit"])) {
                             <div class="icon_typing" id="name_status_icon"></div>
                         </div></td>
                 </tr>
+
+                <!---------------- AccessLevel input ---------------->
+                <tr><th>
+                        Уровень доступа:
+                    </th></tr>
+
+                <tr><td>
+                        <!-- Error message box -->
+                        <div class="inputs_error_container_askue">
+                            <div class="inputs_error_text" id="name_error_message"></div>
+                        </div>
+
+                        <!-- AccessLevel input: -->
+                        <select id="access_level_select" name="access_level_select" class="askue-select-add">
+                            <option value="1" <?php if($edit_group && $edit_group->getAccessLevel()==1) echo "selected";?>>Клиентский - 1</option>
+                            <option value="2" <?php if($edit_group && $edit_group->getAccessLevel()==2) echo "selected";?>>Операторский - 2</option>
+                            <option value="3" <?php if($edit_group && $edit_group->getAccessLevel()==3) echo "selected";?>>Административный - 3</option>
+                        </select>
+
+                    </td>
+                    <!-- Name icon: -->
+                    <td width="35" align="center"><div class="icon-status-container">
+                            <div class="icon_typing" id="name_status_icon"></div>
+                        </div></td>
+                </tr>
             </table>
         </div>
 
@@ -68,3 +94,6 @@ if(isset($_GET["edit"])) {
     </form>
 
 </div>
+<?php else: ?>
+    <div class="edit-title">Нет доступа к данной странице</div>
+<?php endif; ?>

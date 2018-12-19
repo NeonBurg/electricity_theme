@@ -33,10 +33,24 @@ if($wpdb) {
 
 
     $account_id = $wpdb->get_var($wpdb->prepare("SELECT id FROM user_room_accounts WHERE login = '%s'", $owner_login));
+
     if(empty($account_id)) {
         http_response_code(400);
         echo "Неверный аккаунт пользователя";
         exit;
+    }
+    else {
+        $customer_id = $wpdb->get_var($wpdb->prepare("SELECT id FROM Customers WHERE account_id = '%d'", $account_id));
+
+        if(!empty($customer_id)) {
+            http_response_code(200);
+            echo "account_id = ".$account_id;
+        }
+        else {
+            http_response_code(400);
+            echo "Неверный аккаунт пользователя";
+            exit;
+        }
     }
 
     //http_response_code(400);

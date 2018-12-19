@@ -31,7 +31,8 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(0, "../../wp-content/plugins/askue/pages/accounts_manage/add_group/check_name.php", $form_data, name_error_message, name_status_icon);
+        //makeAjaxPost(0, "../../wp-content/plugins/askue/pages/accounts_manage/add_group/check_name.php", $form_data, name_error_message, name_status_icon);
+        makeAjaxPost(0, myScript.askue_plugin_url + "/askue/pages/accounts_manage/add_group/check_name.php", $form_data, name_error_message, name_status_icon);
         counterKeys = 0;
     }
 
@@ -62,11 +63,17 @@ jQuery(document).ready(function($) {
 
         $.ajax({
             type: 'POST',
-            url: "../../wp-content/plugins/askue/pages/accounts_manage/add_group/final_check.php",
+            //url: "../../wp-content/plugins/askue/pages/accounts_manage/add_group/final_check.php",
+            url: myScript.askue_plugin_url + "/askue/pages/accounts_manage/add_group/final_check.php",
             data: formData
         }).done(function(response) {
             //console.log(response);
-            window.location.replace("/wp-admin/admin.php?page=accounts_manage");
+            if(myScript.is_admin) {
+                window.location.replace("/wp-admin/admin.php?page=accounts_manage");
+            }
+            else {
+                window.location.replace("/user-room/accoutns-management/");
+            }
         }).fail(function(data) {
             console.log('add meter error!');
             if (data.responseText !== '') {
