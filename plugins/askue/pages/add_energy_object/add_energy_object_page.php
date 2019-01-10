@@ -1,4 +1,4 @@
-<?php if($access_level == 2 || $access_level == 3 || is_admin()):?>
+<?php if(isset($access_level) && ($access_level == 2 || $access_level == 3) || is_admin()):?>
 <?php
 /**
  * Created by PhpStorm.
@@ -12,16 +12,22 @@ require_once(ASKUE_PLUGIN_DIR . "models/Customer.php");
 
 global $wpdb;
 $dataController = new DataController($wpdb);
+$energyObjectsList = $dataController->selectEnergyObjects();
 $customersList = $dataController->selectCustomersList();
+$metersList = $dataController->selectMetersList();
 
 $edit_energy_object = null;
 $edit_energy_object_owner = null;
+$edit_energy_object_parent = null;
+$edit_meter = null;
 
 if(isset($_GET["edit"])) {
     require_once(ASKUE_PLUGIN_DIR . "models/EnergyObject.php");
     $energy_object_id = $_GET["edit"];
     $edit_energy_object = $dataController->selectEnergyObject($energy_object_id);
     $edit_energy_object_owner = $dataController->selectCustomer($edit_energy_object->getCustomerId());
+    $edit_energy_object_parent = $dataController->selectEnergyObject($edit_energy_object->getEnergyObjectId());
+    $edit_meter = $dataController->selectMeter($edit_energy_object->getMeterId());
 }
 
 ?>
@@ -29,10 +35,10 @@ if(isset($_GET["edit"])) {
 <?php wp_enqueue_script('donetype_script'); ?>
 <?php wp_enqueue_script('add_energy_object_ajax'); ?>
 
-<div class="edit-title">
-    <?php if($edit_energy_object) echo "АСКУЭ » Объект: '".$edit_energy_object->getName()."'";
+<h1>
+    <?php if($edit_energy_object) echo "АСКУЭ » Редактирование объекта: '".$edit_energy_object->getName()."'";
     else echo "АСКУЭ » Добавление нового энергетического объекта"?>
-</div>
+</h1>
 
 <div class="askue-admin-content">
 
@@ -119,16 +125,73 @@ if(isset($_GET["edit"])) {
                         </div>
                     </td></tr>
 
+                <!---------------- Energy Object input ---------------->
+                <tr><th>
+                        Объект:
+                    </th></tr>
+
+                <tr><td>
+                        <!-- Energy Object input: -->
+                        <input list="energy_objects_list" name="energy_object_input" id="energy_object_input" class="askue-list-input" placeholder="Выберите объект" autocomplete="off" <?php if($edit_energy_object_parent) echo 'value="'.$edit_energy_object_parent->getName().'"';?>>
+                        <datalist id="energy_objects_list" >
+                            <?php foreach ($energyObjectsList as $energyObject): ?>
+                                <option value="<?=$energyObject->getName();?>"></option>
+                            <?php endforeach; ?>
+                        </datalist>
+
+                        <!-- Energy Object icon: -->
+                        <div class="icon-status-container">
+                            <div class="icon_typing" id="energy_object_status_icon"></div>
+                        </div>
+
+                        <!-- Error message box -->
+                        <div class="inputs_error_container_horizontal">
+                            <div class="inputs_error_text" id="energy_object_error_message"></div>
+                        </div>
+                    </td></tr>
+
+                <!---------------- Energy Object Meter input ---------------->
+                <tr><th>
+                        Счетчик энергетического объекта:
+                    </th></tr>
+
+                <tr><td>
+                        <!-- Energy Object Meter input: -->
+                        <input list="meters_list" name="meter_name_input" id="meter_name_input" class="askue-list-input" placeholder="Выберите счетчик" autocomplete="off" <?php if($edit_meter) echo 'value="'.$edit_meter->getName().'"';?>>
+
+                        <datalist id="meters_list" >
+                            <?php foreach ($metersList as $meter): ?>
+                                <option value="<?=$meter->getName();?>"></option>
+                            <?php endforeach; ?>
+                        </datalist>
+
+                        <!-- Energy Object icon: -->
+                        <div class="icon-status-container">
+                            <div class="icon_typing" id="meter_status_icon"></div>
+                        </div>
+
+                        <!-- Error message box -->
+                        <div class="inputs_error_container_horizontal">
+                            <div class="inputs_error_text" id="meter_error_message"></div>
+                        </div>
+                </td></tr>
+
             </table>
         </div>
 
         <!---------------- Submit button ----------------->
         <table class="askue-submit-button-table" cellpadding="0" cellspacing="0">
-            <tr><td align="right">
+            <tr>
+                <td align="left" style="vertical-align: top;">
+                    <div id="add_energy_object_error" style="color:red;"></div>
+                </td>
+                <td align="right">
                     <input type="submit" class="askue-submit-button" <?php if($edit_energy_object) echo 'value="Сохранить"'; else echo 'value="Добавить"'; ?>>
-                </td></tr>
+                </td>
+            </tr>
         </table>
 
+        <input type="hidden" id="nullableEnergyObject" name="nullableEnergyObject" value="true">
     </form>
 </div>
 <?php else: ?>

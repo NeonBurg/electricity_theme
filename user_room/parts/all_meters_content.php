@@ -10,12 +10,15 @@ $account_id = $_COOKIE["id"];
 global $wpdb;
 $dataController = new DataController($wpdb);
 if($access_level == 2 || $access_level == 3) {
-    $energyObjectsList = $dataController->selectEnergyObjects();
+    //$energyObjectsList = $dataController->selectEnergyObjects();
+    $energyObjectsList = $dataController->selectRootEnergyObjects();
 }
 else if($access_level == 1) {
     $energyObjectsList = $dataController->selectEnergyObjectsForAccount($account_id);
 }
 ?>
+
+<h1>Управление счетчиками</h1>
 
 <?php include(ASKUE_PLUGIN_DIR."pages/manage_buttons_table.php"); ?>
 

@@ -1,0 +1,420 @@
+/*
+Theme Name: Elegant
+Author: Nick
+Description: This is my first theme for WordPress
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Version: 1.0
+Text Domain: elegant
+*/
+
+h1 a {
+    text-decoration: none;
+    color: #23282d;
+}
+
+h1 a:hover {
+    text-decoration: underline;
+}
+
+/*---------------  askue wp-admin main page styles ---------------*/
+
+.energy-object-top {
+    height: 38px;
+    display:block;
+    background-color: #b5b5b5;
+    width:100%;
+}
+
+.energy-object-top-table {
+    width:100%;
+    background-color: #b5b5b5;
+}
+.energy-object-top-table td {
+    height: 38px;
+}
+
+.energy-object-title {
+    padding:10px;
+    font-size:14pt;
+    font-weight:bold;
+    display:inline-block;
+}
+
+.askue-admin-content {
+
+}
+
+.energy-object-content {
+    background: #ffffff;
+    border:1px solid #d9d9d9;
+}
+
+.energy-object-table {
+    width:100%;
+    border: 0px solid;
+}
+
+.energy-object-table th {
+    padding: 10px 0;
+    border: 0px solid;
+    background: #ffffff !important;
+    cursor: default !important;
+    border-bottom:1px solid #d9d9d9;
+}
+
+.energy-object-table td {
+    text-align: center;
+    max-height: 40px;
+    padding: 0px 0px;
+    border:0px silver solid;
+}
+
+.energy-object-table tr:hover {
+    background: #d9d9d9;
+    cursor: pointer;
+}
+
+.energy-object-separator {
+    width: 100%;
+    height:15px;
+}
+
+.askue-horizontal-buttons-containter {
+    width:100%;
+    height:40px;
+}
+
+.askue-horizontal-buttons-inner-right {
+    position: relative;
+    float:right;
+    border:0px solid;
+}
+.askue-horizontal-buttons-inner-left {
+    position: relative;
+    float:left;
+    border:0px solid;
+}
+.askue-button-wrap {
+    display:inline-block;
+    margin-left: 5px;
+}
+
+.askue-select-add {
+    display:inline-block;
+    height:30px!important;
+}
+
+.askue-button {
+    color:black;
+    background-color: #b5b5b5;
+    -webkit-transition-duration: 0.2s; /* Safari */
+    transition-duration: 0.4s;
+    padding:5px 10px;
+    cursor:pointer;
+    box-shadow: 0px 2px #797979;
+}
+
+.askue-button:hover {
+    background-color: #d2d2d2;
+}
+
+.empty-list-notif-table {
+    width:100%;
+    padding: 10px 0;
+    text-align:center;
+}
+
+/*--------------------------------------------*/
+
+/*------------- askue add form styles ------------ */
+.input-form-container {
+    background-color: #ffffff;
+    display:block;
+    padding:5px 10px;
+    border:1px solid #e0e0e0;
+}
+
+.inputs-vertical-table {
+    width: 100%;
+    border: 0px solid;
+    padding-bottom:5px;
+}
+
+.inputs-vertical-table th {
+    text-align: left;
+    padding:5px 0;
+    padding-left:5px;
+    font-weight: 600;
+}
+
+.inputs-vertical-table td {
+    border: 0px solid;
+    padding-bottom:5px;
+    vertical-align: bottom;
+}
+
+.inputs_error_text {
+    color: red;
+}
+
+.inputs_error_container_askue {
+    padding-bottom:4px;
+    padding-left:5px;
+}
+
+.inputs_error_container_horizontal {
+    display:inline-block;
+    padding-left:8px;
+}
+
+.askue_input {
+    width:100%;
+    height:25px;
+    border: 1px solid #b6b6b6;
+    border-radius: 3px;
+    padding-left:5px;
+}
+
+.icon_typing {
+    width:24px;
+    height:24px;
+    background:url(../assets/images/loading_wheel_small.gif);
+    visibility: hidden;
+}
+.icon_complete {
+    width:24px;
+    height:24px;
+    background:url(../assets/images/complete_icon.gif);
+    visibility: hidden;
+}
+.icon_error {
+    width:20px;
+    height:20px;
+    background:url(../assets/images/error_icon.gif);
+    margin-bottom:2px;
+    margin-left:2px;
+    visibility: hidden;
+}
+
+.icon-status-container {
+    display:inline-block;
+    vertical-align:bottom;
+    padding-bottom:2px;
+    padding-left:8px;
+}
+
+.askue-list-input {
+    width:300px;
+    height:25px;
+    border-radius: 3px;
+    border:1px solid #dddddd;
+    padding-left: 5px;
+}
+
+.askue-submit-button {
+    height:45px;
+    background-color: #d2d2d2;
+    border: none;
+    color: black;
+    padding: 0px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.2s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border: 1px solid #b5b5b5;
+    border-radius:3px;
+}
+
+.askue-submit-button:hover {
+    /*background-color: #d2d2d2;*/
+    border-color: #666666;
+    border-radius:3px;
+}
+
+.askue-submit-button-table {
+    width:100%;
+    padding-top: 15px;
+}
+
+.req_field {
+    display:inline-block;
+    color: red;
+}
+
+.edit-title {
+    /*font-size: 2.5em;
+    font-weight:bold;
+    color: #23282d;
+    margin-left:10px;
+    vertical-align: middle;*/
+    /*position:relative;
+    bottom: 10px;*/
+}
+/*----------------------------------------*/
+
+.test_img {
+    width:20px;
+    height:20px;
+    background-color:#00A8EF;
+    /*background:url(../assets/images/edit_button_nonactive.png);*/
+}
+
+.edit-button {
+    width: 15px;
+    height: 15px;
+    background:url(../assets/images/edit_button_nonactive.png);
+}
+
+.edit-button:hover {
+    background:url(../assets/images/edit_button_active.png);
+    cursor:pointer;
+}
+
+.edit-object-button {
+    width: 15px;
+    height: 15px;
+    background:url(../assets/images/edit_object_button_nonactive.png);
+}
+
+.edit-object-button:hover {
+    background:url(../assets/images/edit_button_active.png);
+    cursor:pointer;
+}
+
+.delete-button {
+    width: 15px;
+    height: 15px;
+    background:url(../assets/images/delete_button_nonactive.png);
+}
+
+.delete-button:hover {
+    background:url(../assets/images/delete_button_active.png);
+    cursor:pointer;
+}
+
+.delete-object-button {
+    width: 15px;
+    height: 15px;
+    background:url(../assets/images/delete_object_button_nonactive.png);
+}
+
+.delete-object-button:hover {
+    background:url(../assets/images/delete_button_active.png);
+    cursor:pointer;
+}
+
+/* ------------ accounts management styles ------------ */
+.groups_container {
+    width:50%;
+    padding:10px 0;
+}
+
+.block_title {
+    font-size: 14pt;
+    font-weight: 700;
+    padding: 5px 10px;
+}
+
+.block_title_user_room {
+    display:inline-block;
+    width:100%;
+    background-color: #c4c4c4;
+}
+
+.groups_content {
+    background-color: white;
+}
+
+.group_row {
+    padding: 5px 10px;
+}
+
+.group_row:hover {
+    background-color: #eaeaea;
+}
+
+.add_group_button_wrap {
+    display:inline-block;
+    float:right;
+    margin: 10px 0;
+}
+
+.accounts_container {
+    width:100%;
+    padding:10px 0;
+}
+
+.user_room_block_border {
+    display:block;
+    border:1px solid #c4c4c4;
+}
+
+.tree_line {
+    width: 1px;
+    height: 40px;
+    display:table-cell;
+    background-color: black;
+}
+
+.tree_middle {
+    width: 10px;
+    height: 40px;
+    display:table-cell;
+    background:url(../assets/images/tree_middle.gif) no-repeat;
+    padding-right:5px;
+}
+
+.tree_end {
+    width: 10px;
+    height: 40px;
+    display:table-cell;
+    background:url(../assets/images/tree_end.gif) no-repeat;
+    padding-right:5px;
+}
+
+.nested_name {
+    display:table-cell;
+    vertical-align: top;
+    height:40px;
+}
+
+.nested_name_text {
+    line-height:40px;
+}
+
+.plus_minus_button {
+    width: 30px;
+    height: 30px;
+    display:inline-block;
+    cursor: pointer;
+}
+
+.plus_minus_container {
+    float:right;
+}
+
+.chart-tool-spacer {
+    display:inline-block;
+    width:50px;
+}
+
+.chart-tools-container {
+    display: inline-block;
+    width:100%;
+    padding-left:10px;
+}
+
+.chart-tool-title {
+    display:inline-block;
+}
+
+.chart-date-input {
+    display:inline-block;
+    font-size: 14px;
+    height:25px!important;
+}

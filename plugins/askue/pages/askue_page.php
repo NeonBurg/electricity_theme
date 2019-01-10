@@ -8,7 +8,8 @@
 
 global $wpdb;
 $dataController = new DataController($wpdb);
-$energyObjectsList = $dataController->selectEnergyObjects();
+//$energyObjectsList = $dataController->selectEnergyObjects();
+$energyObjectsList = $dataController->selectRootEnergyObjects();
 
 if(is_admin()) $access_level = 3;
 ?>

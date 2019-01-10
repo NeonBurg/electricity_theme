@@ -73,7 +73,6 @@ class Meter
     {
         $this->concentrator_id = $concentrator_id;
     }
-
     /* --------------- ГЕТТЕРЫ --------------- */
 
     public function getId()
@@ -115,7 +114,5 @@ class Meter
     {
         return $this->concentrator_id;
     }
-
-
 
 }

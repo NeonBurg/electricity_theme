@@ -18,10 +18,10 @@ if(isset($_GET["edit"])) {
 <?php wp_enqueue_script('add_user_group_ajax'); ?>
 
 
-<div class="edit-title">
+<h1>
     <?php if($edit_group) echo "АСКУЭ » Редактирование группы пользователей: '".$edit_group->getName()."'";
     else echo "АСКУЭ » Добавление группы пользователей"?>
-</div>
+</h1>
 
 <div class="askue-admin-content">
 

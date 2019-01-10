@@ -16,7 +16,7 @@
 
             <table class="energy-object-table" cellpadding="0" cellspacing="0">
                 <tr>
-                    <th width="33%" style="text-align:left; padding-left:50px;">ФИО</th>
+                    <th width="33%" style="text-align:left; padding-left:10px;">ФИО</th>
                     <th>Логин</th>
                     <th width="33%">Email</th>
                     <th>Группа</th>
@@ -28,7 +28,7 @@
                 <?php foreach ($accountsList as $account):?>
 
                     <tr>
-                        <td style="text-align:left; padding-left:50px;"><?php echo $account->getSurname()." ".$account->getName()." ".$account->getPatronymic(); ?></td>
+                        <td style="text-align:left; padding-left:10px;"><?php echo $account->getSurname()." ".$account->getName()." ".$account->getPatronymic(); ?></td>
                         <td><?=$account->getLogin();?></td>
                         <td><?php if($account->getEmail()) echo $account->getEmail(); else echo "null"; ?></td>
                         <td><?php if($account->getGroupId()) echo $userGroupsList[$account->getGroupId()]->getName(); else echo "null"; ?></td>
@@ -53,7 +53,7 @@
                 <?php endforeach;?>
             </table>
 <?php else:?>
-    Пустой список групп
+    Пустой список пользователей
 <?php endif; ?>
     </div>
 <?php if(!is_admin()):?>

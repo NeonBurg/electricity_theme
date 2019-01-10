@@ -22,13 +22,13 @@ if($wpdb) {
         exit;
     }
 
-    $test = "";
+    /*$test = "";
     if(isset($_POST["edit_energy_object_name"]))  {
-        $test = "variable set";
+        //$test = "variable set";
     }
     else {
-        $test = "variable empty";
-    }
+        //$test = "variable empty";
+    }*/
 
 
 
@@ -36,7 +36,7 @@ if($wpdb) {
         $check_object_name = $wpdb->get_var($wpdb->prepare("SELECT name FROM EnergyObjects WHERE name = '%s'", $object_name));
         if (!empty($check_object_name)) {
             http_response_code(400);
-            echo "Объект с таким названием уже существует: " . $test;
+            echo "Объект с таким названием уже существует: ";
             exit;
         }
     }

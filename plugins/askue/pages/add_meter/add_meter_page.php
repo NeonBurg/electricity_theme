@@ -35,10 +35,10 @@ if(isset($_GET["edit"])) {
 <?php wp_enqueue_script('donetype_script'); ?>
 <?php wp_enqueue_script('add_meter_ajax'); ?>
 
-<div class="edit-title">
+<h1>
     <?php if($edit_meter) echo "АСКУЭ » Редактирование счетчика: '".$edit_meter->getName()."'";
             else echo "АСКУЭ » Добавление нового счетчика"?>
-</div>
+</h1>
 
 <div class="askue-admin-content">
 

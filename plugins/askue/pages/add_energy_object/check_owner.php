@@ -44,7 +44,6 @@ if($wpdb) {
 
         if(!empty($customer_id)) {
             http_response_code(200);
-            echo "account_id = ".$account_id;
         }
         else {
             http_response_code(400);
@@ -70,7 +69,5 @@ else {
     echo "Отсутсвует соединение с базой данных";
     exit;
 }
-
-?>
 
 ?>

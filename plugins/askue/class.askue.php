@@ -37,6 +37,8 @@ class askue
         add_submenu_page( null, 'Добавить тип счетчика', 'Добавить тип счетчика', 'manage_options', 'add_meter_type', array('askue', 'add_meter_type_onclick') );
         add_submenu_page( null, 'Добавить группу пользователей', 'Добавить группу пользователей', 'manage_options', 'add_user_group', array('askue', 'add_user_group_onclick') );
         add_submenu_page( null, 'Добавить пользователя', 'Добавить пользователя', 'manage_options', 'add_user', array('askue', 'add_user_onclick') );
+        add_submenu_page( null, 'Показатели счетчика', 'Показатели счетчика', 'manage_options', 'meter_details', array('askue', 'meter_details_onclick') );
+        add_submenu_page( null, 'Добавить показания счетчика', 'Добавить показания счетчика', 'manage_options', 'add_meter_value', array('askue', 'add_meter_value_onclick') );
 
         add_submenu_page( 'askue_menu', 'Пользователи', 'Пользователи', 'manage_options', 'accounts_manage', array('askue', 'accounts_management_onclick') );
     }
@@ -51,6 +53,11 @@ class askue
         wp_register_script('add_user_group_ajax', plugins_url('assets/js/add_user_group_ajax.js', __FILE__), array(), null, true);
         wp_register_script('add_user_ajax', plugins_url('assets/js/add_user_ajax.js', __FILE__), array(), null, true);
         wp_register_script('delete_ajax', plugins_url('assets/js/delete_ajax.js', __FILE__), array(), null, true);
+
+        wp_register_script('jquery_flot', plugins_url('assets/js/charts/jquery.flot.min.js', __FILE__), array(), null, true);
+        wp_register_script('flot_stack', plugins_url('assets/js/charts/jquery.flot.stack.js', __FILE__), array(), null, true);
+        wp_register_script('flot_categories', plugins_url('assets/js/charts/jquery.flot.categories.js', __FILE__), array(), null, true);
+        wp_register_script('meter_chart', plugins_url('assets/js/charts/meter-chart.js', __FILE__), array(), null, true);
 
         wp_localize_script('donetype_script', 'myScript', array(
             'askue_plugin_url' => plugins_url(),
@@ -90,6 +97,14 @@ class askue
 
     static function add_user_onclick() {
         include("pages/accounts_manage/add_user/add_user_page.php");
+    }
+
+    static function meter_details_onclick() {
+        include("pages/meter_details/meter_details_page.php");
+    }
+
+    static function add_meter_value_onclick() {
+        include("pages/meter_details/add_meter_value/add_meter_value_page.php");
     }
 
     static function body_css() {

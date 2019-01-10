@@ -1,4 +1,4 @@
-<?php if($access_level == 3 || is_admin()):?>
+<?php if(isset($access_level) && $access_level == 3 || is_admin()):?>
 <?php
 /**
  * Created by PhpStorm.
@@ -11,7 +11,7 @@
 <?php wp_enqueue_script('donetype_script'); ?>
 <?php wp_enqueue_script('add_meter_type_ajax'); ?>
 
-<div class="edit-title">АСКУЭ » Добавление нового типа счетчиков</div>
+<h1>АСКУЭ » Добавление нового типа счетчиков</h1>
 
 <div class="askue-admin-content">
 

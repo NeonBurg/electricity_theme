@@ -51,6 +51,18 @@ function delete_user(user_id, user_name) {
     }
 }
 
+function delete_meter_value(meter_id, value_id, value, date) {
+    if (confirm("Удалить показания счетчика "+value+" (Кв/ч) на момент: '" + date + "' ?")) {
+
+        $form_data = {'meter_id': meter_id, 'value_id': value_id};
+        $form_action = myScript.askue_plugin_url + '/askue/pages/meter_details/add_meter_value/delete_meter_value.php';
+        makeDeleteAjax($form_action, $form_data);
+    }
+    else {
+        console.log('cancel delete user');
+    }
+}
+
 
 // --------------- Ajax запрос на удаление --------------------
 function makeDeleteAjax(action, form_data) {

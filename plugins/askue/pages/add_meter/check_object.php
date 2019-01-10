@@ -12,13 +12,17 @@ global $wpdb;
 
 if($wpdb) {
 
-    $object_name = $_POST["energy_object_input"];
-    $energy_object_id = $wpdb->get_var($wpdb->prepare("SELECT id FROM EnergyObjects WHERE name = %s", $object_name));
+    $parent_object_name = $_POST["energy_object_input"];
+    $energy_object_id = 'NULL';
 
-    if(empty($energy_object_id)) {
-        http_response_code(400);
-        echo "Неверное название объекта";
-        exit;
+    if(!isset($_POST["nullableEnergyObject"]) || (isset($_POST["nullableEnergyObject"]) && !empty($parent_object_name))) {
+        $energy_object_id = $wpdb->get_var($wpdb->prepare("SELECT id FROM EnergyObjects WHERE name = %s", $parent_object_name));
+
+        if(empty($energy_object_id)) {
+            http_response_code(400);
+            echo "Неверное название объекта";
+            exit;
+        }
     }
     
 }
@@ -27,5 +31,7 @@ else {
     echo "Отсутсвует соединение с базой данных";
     exit;
 }
+
+
 
 ?>

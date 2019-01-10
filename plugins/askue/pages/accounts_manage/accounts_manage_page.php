@@ -8,7 +8,7 @@ if(is_admin()) $access_level = 3;
 
 ?>
 
-<div class="edit-title">Управление пользователями</div>
+<h1>Управление пользователями</h1>
 
 <div class="askue-admin-content">
 

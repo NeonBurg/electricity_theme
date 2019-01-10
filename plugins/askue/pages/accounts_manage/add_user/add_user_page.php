@@ -19,10 +19,10 @@ if(isset($_GET["edit"])) {
 <?php wp_enqueue_script('donetype_script'); ?>
 <?php wp_enqueue_script('add_user_ajax'); ?>
 
-<div class="edit-title">
+<h1>
     <?php if($edit_user) echo "АСКУЭ » Редактирование пользователя: '".$edit_user->getLogin()."'";
     else echo "АСКУЭ » Добавление пользователя"?>
-</div>
+</h1>
 
 <div class="askue-admin-content">
 

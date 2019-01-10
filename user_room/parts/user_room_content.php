@@ -10,14 +10,15 @@
     global $wpdb;
     $dataController = new DataController($wpdb);
     if($access_level == 2 || $access_level == 3) {
-        $energyObjectsList = $dataController->selectEnergyObjects();
+        //$energyObjectsList = $dataController->selectEnergyObjects();
+        $energyObjectsList = $dataController->selectRootEnergyObjects();
     }
     else if($access_level == 1) {
         $energyObjectsList = $dataController->selectEnergyObjectsForAccount($account_id);
     }
 ?>
 
-<?php //echo "access_level = ".$access_level;?>
+<h1>Личный кабинет</h1>
 
 <?php include(ASKUE_PLUGIN_DIR."pages/manage_buttons_table.php"); ?>
 

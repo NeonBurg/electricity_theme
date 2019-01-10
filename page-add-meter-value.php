@@ -13,7 +13,7 @@ get_header();
 
 include ($_SERVER['DOCUMENT_ROOT'] . "/user_room/parts/content_head.php");
 
-include(ASKUE_PLUGIN_DIR."pages/accounts_manage/add_user/add_user_page.php");
+include(ASKUE_PLUGIN_DIR."pages/meter_details/add_meter_value/add_meter_value_page.php");
 
 include ($_SERVER['DOCUMENT_ROOT'] . "/user_room/parts/content_footer.php");
 

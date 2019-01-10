@@ -21,6 +21,13 @@ if($wpdb) {
 
         $edit_meter_id = $_POST["edit_meter_id"];
 
+        $check_energy_object_id = $wpdb->get_var($wpdb->prepare("SELECT id FROM EnergyObjects WHERE meter_id = %d", $edit_meter_id));
+        if($check_energy_object_id) {
+            if($energy_object_id !== $check_energy_object_id) {
+                $wpdb->query($wpdb->prepare("UPDATE EnergyObjects SET meter_id = NULL WHERE id = %d", $check_energy_object_id));
+            }
+        }
+
         $sql_update_meter = $wpdb->prepare("UPDATE Meters SET name=%s, num=%d, energyObject_id=%d, meterType_id=%d, network_address=%d WHERE id = %d", $meter_name, $meter_num, $energy_object_id, $meter_type_id, $network_address, $edit_meter_id);
         $wpdb->query($sql_update_meter);
 
@@ -51,7 +58,7 @@ if($wpdb) {
 
             $table_name = "meter_" . $meter_id;
 
-            $wpdb->query("CREATE TABLE  " . $table_name . " (id int(10) NOT NULL AUTO_INCREMENT, KC int(11) NOT NULL, type tinyint(4) NOT NULL, base int(11) NOT NULL, decim tinyint(4) NOT NULL, date datetime NOT NULL UNIQUE, PRIMARY KEY (id))");
+            $wpdb->query("CREATE TABLE  " . $table_name . " (id int(10) NOT NULL AUTO_INCREMENT, KC int(11) NOT NULL, type tinyint(4) NOT NULL, base int(11) NOT NULL, decim varchar(4) NOT NULL, date datetime NOT NULL UNIQUE, PRIMARY KEY (id))");
 
             $check_table = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table_name));
             if (!empty($check_table)) {

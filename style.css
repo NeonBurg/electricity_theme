@@ -21,6 +21,15 @@ body {
 
 }
 
+h1 {
+	font-size: 2.5em;
+	font-weight:bold;
+	color: #23282d;
+	display:inline;
+	position:relative;
+	bottom: 13px;
+}
+
 .header-banner {
 		height:200px;
 		position:relative;
@@ -388,4 +397,8 @@ ul.custom_left_menu li.current-menu-item > a:hover {
 .inputs-vertical-table th {
 	text-align: left;
 	font-weight: normal;
+}
+
+.block_title {
+	background-color: #c4c4c4;
 }
