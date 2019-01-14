@@ -1,4 +1,4 @@
-var h_height = 200;
+var h_height = 0;
 var menu_height = 50;
 var top_offset;
 

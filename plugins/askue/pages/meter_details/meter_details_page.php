@@ -19,6 +19,8 @@
     $meterValuesList = array();
     $meter_last_date = "2019-01-02T21:21";
 
+    $currentValue = 0;
+
     if(isset($_GET["meter"])) {
         $meter_id = $_GET["meter"];
         if (!empty($meter_id)) {
@@ -28,6 +30,7 @@
             if($meter_last_value != null) {
                 $meter_last_date = $meter_last_value->getDate();
             }
+            $currentValue = $dataController->selectMeterLastValue($meter_id)->getValue();
         }
     }
 
@@ -38,18 +41,32 @@
             width: 100%;
             height:500px;
         }
+
+        #legend-container {
+            z-index:1000;
+            position:absolute;
+            margin-left:40px;
+            margin-top:15px;
+        }
+
+        #last-chart-category {
+            width:50px;
+            position:relative;
+            float:right;
+            bottom: 20px;
+            left: 15px;
+            color: #575757;
+            font-size: 10pt;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        #meter-chart{
+            width:100%;
+            font-family: 'Open Sans', sans-serif;
+        }
     </style>
 
 <h1>Счетчик '<?=$meter->getName();?>'</h1>
-
-    <?php
-        /*$meter_values_list = $dataController->selectFilteredMeterValues(DataController::MINUTES_30, new DateTime("2018-12-25 10:00"), new DateTime("2018-12-25 12:00"), $meter_id);
-        //echo count($meter_values_list);
-        foreach($meter_values_list as $meter_value) {
-            //echo $meter_value . " | ";
-            echo $meter_value[1] . " - " . $meter_value[0]. " | ";
-        }*/
-    ?>
 
     <div class="chart-tools-container">
         <div class="chart-tool-title">Интервал: </div>
@@ -71,9 +88,18 @@
         <button type="button" id="select_date_button" style="display: inline-block; height:29px;">Ок</button>
     </div>
 
-    <div class="meter-chart-container">
+    <div class="meter-chart-container" id="meter-chart-container">
+        <div id="legend-container"></div>
         <div id="meter-chart" class="demo-meter-chart"></div>
+        <div id="last-chart-category"></div>
     </div>
+
+
+    <div style="height:15px;"></div>
+
+    <?php include(ASKUE_PLUGIN_DIR."pages/statistics_block.php"); ?>
+
+<div class="meters_table_container">
 
     <!---------- Meter Values Table ------------>
     <div class="accounts_container">
@@ -133,5 +159,6 @@
     <?php if($access_level == 3): ?>
         <div style="width:100%; display: inline-block;"><div class="add_group_button_wrap"><div class="askue-button" onclick="<?php if(is_admin()) echo "location.href='/wp-admin/admin.php?page=add_meter_value&meter=".$meter->getId()."'"; else echo "location.href='/user-room/meters-management/meter-details/add-meter-value?meter=".$meter->getId()."'"; ?>">Добавить показания</div></div></div>
     <?php endif; ?>
+</div>
 
 <?php endif; ?>

@@ -113,4 +113,8 @@ class Customer
     {
         return $this->email;
     }
+
+    public function getFIO() {
+        return $this->surname." ".$this->name." ".$this->patronymic;
+    }
 }

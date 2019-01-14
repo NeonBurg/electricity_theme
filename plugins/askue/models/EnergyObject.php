@@ -14,6 +14,7 @@ class EnergyObject
     private $customer_id;
     private $energyObject_id;
     private $meter_id;
+    private $value;
 
     private $meters_list = array();
 
@@ -62,6 +63,10 @@ class EnergyObject
         $this->meter_id = $meter_id;
     }
 
+    public function setValue($value) {
+        $this->value = $value;
+    }
+
     /* --------------- ГЕТТЕРЫ --------------- */
 
     public function getId()
@@ -97,5 +102,8 @@ class EnergyObject
         return $this->meter_id;
     }
 
+    public function getValue() {
+        return $this->value;
+    }
 
 }

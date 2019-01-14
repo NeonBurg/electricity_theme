@@ -1,57 +1,12 @@
 (function($) {
     $(function () {
         $(document).ready(function() {
-            //var d2 = [[0, 3], [4, 8], [8, 5], [9, 13]];
-
-            /*var categories =['9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30'];
-            var d1 = [[0,3], [1, 4], [2, 7], [3, 8], [4, 13], [5, 16], [6, 17], [7, 19], [8, 20]];
-            var d2 = [];
-            var d3 = [];
-
-            for(var i = 0; i < (d1.length-1); i++) {
-                var d1_val = d1[i][1];
-                var d1_next_val = d1[i+1][1];
-
-                var difference = d1_next_val - d1_val;
-                d2.push([i+1, difference]);
-            }
-
-            d3[0] = d1[0];
-            for(var i = 1; i < d1.length; i++) {
-                //console.log('d1 = ' + d1[i][1] + ' | d2 = ' + d2[i-1][1]);
-                d3.push([i, (d1[i][1] - d2[i-1][1])]);
-            }
-
-            for(var i = 0; i<d3.length; i++) {
-                d3[i][0] = categories[i];
-            }
-
-            for(var i = 0; i<d2.length; i++) {
-                d2[i][0] = categories[i+1];
-            }
-
-            //var data = [ ["January", 10], ["February", 8], ["March", 4], ["April", 13], ["May", 17], ["June", 9] ];
-
-            // ------------- Рисуем график -------------------
-            $.plot("#meter-chart", [d3, d2], {
-                series: {
-                    stack: 0,
-                    bars: {
-                        show: true,
-                        barWidth: 0.9
-                        //align: "center"
-                    }
-                },
-                xaxis: {
-                    mode: "categories",
-                    tickLength: 0
-                }
-            });*/
 
             var previousPoint = null,
                 previousLabel = null;
 
             var interval = 1; // to-do $('#interval').val()
+            var is_date_selected = false;
 
             var select_interval = document.getElementById("select_add");
             var date_from_input = document.getElementById("date_from");
@@ -64,12 +19,6 @@
 
             select_date_button.addEventListener("click", select_date_clicked);
 
-            /*$form_data = {'interval' : interval,
-                        'from_date' : '2018-12-25 10:00',
-                        'to_date' : '2018-12-25 12:00',
-                        'meter_id' : 8};
-            makeSelectAjax(myScript.askue_plugin_url + "/askue/pages/meter_details/select_chart_values.php", $form_data);*/
-
 
             // --------------- Ajax запрос на выборку значений счетчика --------------------
             function makeSelectAjax(action, form_data) {
@@ -79,7 +28,7 @@
                     url: action,
                     data: form_data
                 }).done(function (response) {
-                    console.log('response: ' + response);
+                    //console.log('response: ' + response);
                     var json_reponse =  jQuery.parseJSON(response);
                     //console.log('arr size = ' + Object.keys(json_reponse).length);
                     showDataSet(json_reponse);
@@ -103,29 +52,44 @@
                 var d2 = [];
                 var d3 = [];
 
+                var old_value = 0;
+
                 if(arr_size > 0) {
                         d2.push([json_meter_values[0][0], json_meter_values[0][1]]);
-                        for (var i = 0; i < (arr_size - 1); i++) {
+                        for (var i = 0; i < (arr_size - 2); i++) {
                             //console.log(json_meter_values[i][0] + " - " + json_meter_values[i][1]);
                             var d1_val = json_meter_values[i][1];
                             var d1_next_val = json_meter_values[i + 1][1];
 
                             var difference = d1_next_val - d1_val;
-                            d2.push([json_meter_values[i + 1][0], difference]);
+
+                            if(d1_val !== 0) old_value = d1_val;
+                            else {
+                                difference = d1_next_val - old_value;
+                            }
+                            //console.log('difference = ' + difference);
+                            if(difference < 0) {
+                                d2.push([json_meter_values[i + 1][0], json_meter_values[i + 1][1]]);
+                            }
+                            else {
+                                d2.push([json_meter_values[i + 1][0], difference]);
+                            }
                         }
 
-                        for (var i = 0; i < arr_size; i++) {
-                            //console.log('d1 = ' + d1[i][1] + ' | d2 = ' + d2[i-1][1]);
+                        for (var i = 0; i < arr_size-1; i++) {
                             d3.push([json_meter_values[i][0], (json_meter_values[i][1] - d2[i][1])]);
+                            //console.log('d3 = ' + d3[i][1]);
                         }
 
-                        drawBarsChart(d3, d2);
+                        //d3.push()
+
+                        drawBarsChart(d3, d2, json_meter_values[arr_size-1][0]);
                 }
             }
 
             // ------------- Рисуем график гистограмму -------------------
-            function drawBarsChart(arr1, arr2) {
-                $.plot("#meter-chart", [{label: "Прошлое потребление Кв/Ч", data: arr1}, {label: "Актуальное потребление Кв/Ч", data: arr2}], {
+            function drawBarsChart(arr1, arr2, last_val) {
+                var p = $.plot("#meter-chart", [{label: "Прошлое потребление Кв/Ч", data: arr1}, {label: "Актуальное потребление Кв/Ч", data: arr2}], {
                     series: {
                         stack: 0,
                         bars: {
@@ -145,9 +109,81 @@
                     },
                     valueLabels: {
                         show: true
-                    }
+                    },
+                    legend:{
+                        container:$("#legend-container")
+                    },
                 });
+
+                /*if(p.getData()[0].data.length > 20) {
+                    $.each(p.getData()[0].data, function(i, el){
+                        if(i%2===0) {
+                            //console.log('el['+i+']= ' + el);
+                        }
+                    });
+                }*/
+
+                var chart_elements = p.getData()[0].data.length;
+                var interval = parseInt(chart_elements/15);
+
+
+                //console.log('chart_elements = ' + chart_elements);
+
+                var chart_label_width = parseInt($('.flot-x-axis .flot-tick-label').css("width"));
+                var chart_width = parseInt($("#meter-chart-container").css("width"));
+                var chart_label_height = parseInt($('.flot-x-axis .flot-tick-label').css("height"));
+                var all_labels_width = chart_label_width*chart_elements;
+
+                console.log('chart_width = ' + chart_width);
+                console.log('chart_elements = ' + chart_elements);
+                console.log('chart_label_width = ' + chart_label_width);
+                console.log('all labels width = ' + all_labels_width);
+                console.log('statement: ' + (chart_width - all_labels_width));
+
+                var is_shortcut_labels = false;
+                if((chart_width - all_labels_width) < 150 || chart_label_width < 10) {
+                    is_shortcut_labels = true;
+                }
+
+                console.log('is_shortcut_labels: ' + is_shortcut_labels);
+
+                if(is_shortcut_labels) {
+                    if(interval <= 1) interval = 2;
+                    $('.flot-x-axis .flot-tick-label').each(function (index) {
+                        //$(this).css("display","none");
+                        if(index%interval!==0) {
+                            //console.log('css width = ' + $(this).css("width"));
+                            $(this).css("display","none");
+                            //console.log('index = ' + index);
+                        }
+                        else {
+                            if(is_shortcut_labels) {
+                                console.log('is_shortcut_labels');
+                                $(this).css("width", "50px!important");
+                                $(this).css("height", "50px!important");
+                            }
+                        }
+                        //char_label_width = parseInt($(this).css("width"));
+                    });
+                    document.getElementById("last-chart-category").innerHTML = "";
+                }
+                else {
+                    //last-chart-category
+                    document.getElementById("last-chart-category").innerHTML = last_val;
+                }
+
+                //console.log('char_label_height = ' + chart_label_height);
+
+                    if(chart_label_height > 18) {
+                        document.getElementById("last-chart-category").style.width = "50px";
+                        document.getElementById("last-chart-category").style.bottom = "38px";
+                    }
+                    else {
+                        document.getElementById("last-chart-category").style.width = "100px";
+                        document.getElementById("last-chart-category").style.bottom = "20px";
+                    }
             }
+
 
             function showTooltip(x, y, color, contents) {
                 $('<div id="tooltip">' + contents + '</div>').css({
@@ -201,7 +237,13 @@
 
                 var date_to = new Date(meter_last_date.value);
                 var date_from = new Date(date_to);
+
                 date_from.setHours(0, 0);
+
+                if(is_date_selected) {
+                    date_to = new Date(date_to_input.value);
+                    date_from = new Date(date_from_input.value);
+                }
 
                 //console.log('last meter value date = ' + meter_last_value_date);
                 //console.log('last meter date = ' + meter_last_date);
@@ -212,7 +254,7 @@
                         break;
                     case 'HOURS_1':
                         //date_from.setMonth(date_from.getMonth(), date_from.getDay() - 1);
-                        date_from.setDate(date_from.getDate() - 1);
+                        //date_from.setDate(date_from.getDate());
                         interval = 2;
                         break;
                     case 'DAY':
@@ -221,10 +263,12 @@
                         break;
                     case 'WEEK':
                         date_from.setDate(date_from.getDate() - 30);
+                        date_from.setDate(1);
                         interval = 5;
                         break;
                     case 'MONTH':
                         date_from.setDate(date_from.getDate() - 30*3);
+                        date_from.setDate(1);
                         interval = 6;
                         break;
                     default:
@@ -233,6 +277,8 @@
 
                 var formatted_date_from = getFormattedDate(date_from);
                 var formatted_date_to = getFormattedDate(date_to);
+
+                console.log('formatted_date_from = ' + formatted_date_from);
 
                 $form_data = {'interval' : interval,
                     'from_date' : formatted_date_from,
@@ -250,11 +296,15 @@
 
             function select_date_clicked() {
 
+                is_date_selected = true;
+
                 var date_from = new Date(date_from_input.value);
                 var date_to = new Date(date_to_input.value);
 
                 var formatted_date_from = getFormattedDate(date_from);
                 var formatted_date_to = getFormattedDate(date_to);
+
+                console.log('formatted_date_to = ' + formatted_date_to);
 
                 $form_data = {'interval' : interval,
                     'from_date' : formatted_date_from,

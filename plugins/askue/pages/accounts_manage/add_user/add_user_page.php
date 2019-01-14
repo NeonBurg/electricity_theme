@@ -1,4 +1,4 @@
-<?php if($access_level == 3 || is_admin()):?>
+<?php if((isset($access_level) && $access_level == 3) || is_admin()):?>
 <?php
 require_once(ASKUE_PLUGIN_DIR . "models/DataController.php");
 

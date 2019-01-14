@@ -37,12 +37,7 @@ if(isset($post) && $post->post_type == 'page' && ($post->ID == '10' || $post->ID
 <body>
 
 <div class="page">
-		<div class="header-banner">
-			<div class="header-block-info">
-				<a href="/"><div class="header-logo"></div></a>
-				<div class="header-description"><?php echo get_bloginfo('description'); ?></div>
-			</div>
-		</div>
+    <div class="head-spacer"></div>
 
 <div class="menu-container">
     <div style="width:980px; display:block; margin:auto;">

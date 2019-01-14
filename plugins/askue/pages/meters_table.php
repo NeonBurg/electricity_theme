@@ -15,9 +15,9 @@
 
 <?php
 
-function showNestedObjects($nestedLevel, $energyObjectId, $dataController, $nestedParentMetersCounts=[]) {
+function showNestedObjects($nestedLevel, $energyObjectId, $dataController, $nestedParentMetersCounts=[], $user_id=-1) {
 
-    $nestedEnergyObjects = $dataController->selectNestedEnergyObjects($energyObjectId);
+    $nestedEnergyObjects = $dataController->selectNestedEnergyObjects($energyObjectId, $user_id);
     $nestedParentMeters = $dataController->selectMetersList($energyObjectId);
 
     $parentEnergyObject = $dataController->selectEnergyObject($energyObjectId);
@@ -217,7 +217,10 @@ function printMeterRow($meter, $nestedLevel, $is_last_row, $last_value, $parent_
             </tr>
 
             <?php
+            if($access_level==3)
                 showNestedObjects(0, $energyObject->getId(), $dataController);
+            else
+                showNestedObjects(0, $energyObject->getId(), $dataController, $customer->getId());
             ?>
         </table>
 

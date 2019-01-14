@@ -39,8 +39,9 @@ function be_menu_item_classes( $classes, $item) {
     $current_url = current_url();
 
     if (strstr($current_url, $item->url) && strstr($current_url, '/user-room/')) {
-        if (strstr($item->url, '/accoutns-management/') || strstr($item->url, '/meters-management/'))
+        if (strstr($item->url, '/accounts-management/') || strstr($item->url, '/meters-management/')) {
             $classes[] = 'current-menu-item';
+        }
     }
 
     return array_unique( $classes );

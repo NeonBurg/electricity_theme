@@ -1,7 +1,7 @@
 <body>
 <div class="user-room-content">
 
-<div style="position:relative; float:right; margin-top:-15px; padding-bottom:10px;">
+<div style="position:relative; float:right;">
     <?php echo "Вы вошли как: <b>" . $_COOKIE['login'] . "</b>"; ?>
 </div>
 

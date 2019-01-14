@@ -3,7 +3,7 @@ function delete_meter(meter_id, meter_name) {
         console.log('delete meter: id = ' + meter_id);
         $form_data = {'meter_id': meter_id};
         //$form_action = '<?=plugins_url("/remove_meter.php", __FILE__);?>';
-        $form_action = myScript.askue_plugin_url + '/askue/pages/remove_meter.php';
+        $form_action = myScript.askue_plugin_url + '/askue/pages/add_meter/remove_meter.php';
         makeDeleteAjax($form_action, $form_data);
     }
     else {
@@ -16,7 +16,7 @@ function delete_energy_object(energy_object_id, energy_object_name) {
         console.log('delete meter: id = ' + energy_object_id);
         $form_data = {'energy_object_id': energy_object_id};
         //$form_action = '<?=plugins_url("/remove_energy_object.php", __FILE__);?>';
-        $form_action = myScript.askue_plugin_url + '/askue/pages/remove_energy_object.php';
+        $form_action = myScript.askue_plugin_url + '/askue/pages/add_energy_object/remove_energy_object.php';
         makeDeleteAjax($form_action, $form_data);
     }
     else {

@@ -312,7 +312,7 @@ jQuery(document).ready(function($) {
                 window.location.replace("/wp-admin/admin.php?page=accounts_manage");
             }
             else {
-                window.location.replace("/user-room/accoutns-management/");
+                window.location.replace("/user-room/accounts-management/");
             }
 
         }).fail(function(data) {

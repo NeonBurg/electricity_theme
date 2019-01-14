@@ -142,6 +142,9 @@ class DataController
 
                 $meters_result = $this->selectMetersList($energyObject->getId());
                 $energyObject->setMetersList($meters_result);
+
+
+
                 $energy_objects_list[] = $energyObject;
             }
         }
@@ -260,6 +263,18 @@ class DataController
         return $customer;
     }
 
+    // ---------- Получим информацию о пользователе --------------
+    public function selectCustomerByAccountId($account_id) {
+
+        $customer = null;
+
+        $select_query = $this->wpdb->prepare("SELECT Customers.*, user_room_accounts.login FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id WHERE user_room_accounts.id = %d", $account_id);
+        $results = $this->get_rowSQL($select_query);
+        if($results) $customer = new Customer($results);
+
+        return $customer;
+    }
+
     // ---------- Получим группы пользователей --------------
     public function selectUserGroupsList() {
         $groups_list = array();
@@ -290,8 +305,14 @@ class DataController
     }
 
     // -------------- Получим список вложенных энергетичечких объектов по ID объекта -----------------
-    public function selectNestedEnergyObjects($energy_object_id) {
-        $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT * FROM EnergyObjects WHERE energyObject_id = %d", $energy_object_id));
+    public function selectNestedEnergyObjects($energy_object_id, $user_id=-1) {
+
+        if($user_id==-1) {
+            $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT * FROM EnergyObjects WHERE energyObject_id = %d", $energy_object_id));
+        }
+        else {
+            $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT * FROM EnergyObjects WHERE energyObject_id = %d AND customer_id = %s", $energy_object_id, $user_id));
+        }
 
         $energy_objects_list = array();
 
@@ -355,30 +376,74 @@ class DataController
         $meter_values_list = array();
 
         $iterator_date = new DateTime(date_format($from_date, 'd.m.Y H:i'));
+        //echo "iterator_date = " . date_format($iterator_date, 'd.m.Y H:i');
+        //$iterator_date = new DateTime(date_format($to_date, 'd.m.Y H:i'));
+
+        $meter_first_value = $this->selectMeterFirstValue($meter_id);
+        //$first_date = new DateTime($meter_first_value->getDate());
+
+        /*if($iterator_date < $first_date) {
+            $iterator_date = new DateTime(date_format($first_date, 'd.m.Y H:i'));
+        }*/
+
+        //echo "date_to" . date_format($to_date, 'd.m.Y H:i');
+
         $next_date = new DateTime(date_format($iterator_date, 'd.m.Y H:i'));
+
+        $date_format_style = '';
+        $statement_sign = '';
+        //$last_date = new DateTime();
 
         switch ($interval) {
             case self::MINUTES_30:
                 $next_date->modify("+30 minutes");
+                $date_format_style = 'd.m H:i';
+                $statement_sign = '<=';
                 break;
             case self::HOURS_1:
                 $next_date->modify("+60 minutes");
+                $date_format_style = 'd.m H:i';
+                $statement_sign = '<=';
                 break;
             case self::DAY:
                 $next_date->modify("+1 day");
+                $date_format_style = 'd.m';
+                $statement_sign = '<';
                 break;
             case self::WEEK:
                 $next_date->modify("+7 day");
+                $date_format_style = 'd.m';
+                $statement_sign = '<';
                 break;
             case self::MONTH:
                 $next_date->modify("+1 month");
+                $date_format_style = 'd.m.y';
+                $statement_sign = '<';
                 break;
             default:
                 $next_date->modify("+1 day");
+                $date_format_style = 'd.m';
                 break;
         }
 
+        //while($iterator_date < $to_date) {
         while($iterator_date < $to_date) {
+
+            //$meter_values_list[] = date_format($iterator_date, 'Y-m-d H:i') . " - " . date_format($next_date, 'Y-m-d H:i');
+            $select_query = $this->wpdb->prepare("SELECT * FROM meter_%d WHERE date = ( SELECT MAX(date) as date FROM meter_%d WHERE date >= '%s' AND date ".$statement_sign." '%s')", $meter_id, $meter_id, date_format($iterator_date, 'Y-m-d H:i'), date_format($next_date, 'Y-m-d H:i'));
+            $row_sql = $this->get_rowSQL($select_query);
+
+            if($row_sql) {
+                //echo "[iterator_date = " . date_format($iterator_date, 'Y-m-d H:i');
+                //echo "next_date = " . date_format($next_date, 'Y-m-d H:i')."]";
+
+                $meter_value = new MeterValue($row_sql);
+                $meter_values_list[] = [date_format($iterator_date, $date_format_style), $meter_value->getValue()];
+                //$last_date = new DateTime(date_format($next_date, 'Y-m-d H:i'));
+            }
+            else {
+                $meter_values_list[] = [date_format($iterator_date, $date_format_style), 0];
+            }
 
             switch($interval) {
                 case self::MINUTES_30:
@@ -407,17 +472,12 @@ class DataController
                     break;
             }
 
-            //$meter_values_list[] = date_format($iterator_date, 'Y-m-d H:i') . " - " . date_format($next_date, 'Y-m-d H:i');
-            $select_query = $this->wpdb->prepare("SELECT * FROM meter_%d WHERE date = ( SELECT MAX(date) as date FROM meter_%d WHERE date >= '%s' AND date <= '%s')", $meter_id, $meter_id, date_format($iterator_date, 'Y-m-d H:i'), date_format($next_date, 'Y-m-d H:i'));
-            $row_sql = $this->get_rowSQL($select_query);
-
-            if($row_sql) {
-                $meter_value = new MeterValue($row_sql);
-                $meter_values_list[] = [date_format($iterator_date, 'd.m.Y H:i'), $meter_value->getValue()];
-            }
+            //echo "iterator_date = " . date_format($iterator_date, 'd.m.Y H:i');
         }
 
-        //$select_query = $this->wpdb->prepare("SELECT * FROM meter_%d WHERE date = ( SELECT MAX(date) as date FROM meter_%d WHERE date >= '2018-12-25 10:30' AND date < '2018-12-25 11:00')", $meter_id, $meter_id);
+        //echo "date_to = " . date_format($to_date, 'd.m.Y H:i');
+
+        $meter_values_list[] = [date_format($iterator_date, $date_format_style), 0];
 
         return $meter_values_list;
     }
@@ -432,11 +492,26 @@ class DataController
         return $meter_last_value;
     }
 
-    public function selectEnergyObjectValue($energyObject) {
+    public function selectMeterFirstValue($meter_id) {
+
+        $meter_last_value = null;
+        $select_query = $this->wpdb->prepare("SELECT * FROM meter_%d WHERE date = (SELECT MIN(date) as date FROM meter_%d)", $meter_id, $meter_id);
+        $results = $this->get_rowSQL($select_query);
+        if($results) $meter_last_value = new MeterValue($results);
+
+        return $meter_last_value;
+    }
+
+    public function selectEnergyObjectValue($energyObject, $user_id=-1) {
 
         $meters_values_list = array();
         $energyObjectValue = 0;
-        $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT id, meter_id FROM EnergyObjects WHERE energyObject_id = %d", $energyObject->getId()));
+        if($user_id==-1) {
+            $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT id, meter_id FROM EnergyObjects WHERE energyObject_id = %d", $energyObject->getId()));
+        }
+        else {
+            $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT id, meter_id FROM EnergyObjects WHERE energyObject_id = %d AND customer_id = %s", $energyObject->getId(), $user_id));
+        }
 
         $meters_values_list = array_merge($meters_values_list, $this->selectEnergyObjectMeterValues($energyObject->getId(), $energyObject->getMeterId()));
 
@@ -446,7 +521,12 @@ class DataController
                 $meters_values_list = array_merge($meters_values_list, $this->selectEnergyObjectMeterValues($result_row->id, $result_row->meter_id));
             }
 
-            $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT id FROM EnergyObjects WHERE energyObject_id = %d", $result_row->id));
+            if($user_id==-1) {
+                $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT id, meter_id FROM EnergyObjects WHERE energyObject_id = %d", $result_row->id));
+            }
+            else {
+                $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT id, meter_id FROM EnergyObjects WHERE energyObject_id = %d AND customer_id = %s", $result_row->id, $user_id));
+            }
         }
 
         foreach($meters_values_list as $meter_value) {
@@ -464,7 +544,8 @@ class DataController
             $query_sql = $this->wpdb->prepare("SELECT id FROM Meters WHERE energyObject_id = %d", $energyObject_id);
         }
         else {
-            $query_sql = $this->wpdb->prepare("SELECT id FROM Meters WHERE Meters.energyObject_id = %d AND Meters.id != %d", $energyObject_id, $energyObjectMeter_id);
+            //$query_sql = $this->wpdb->prepare("SELECT id FROM Meters WHERE Meters.energyObject_id = %d AND Meters.id != %d", $energyObject_id, $energyObjectMeter_id);
+            $query_sql = $this->wpdb->prepare("SELECT id FROM Meters WHERE Meters.id = %d", $energyObjectMeter_id);
         }
         $meter_results = $this->get_resultsSQL($query_sql);
         if($meter_results) {
@@ -475,6 +556,30 @@ class DataController
         }
 
         return $energy_object_meter_values;
+    }
+
+    public function selectCurrentElectricityValue($user_id=-1) {
+
+        $currentValue =  0;
+
+        if($user_id == -1) {
+            //$energyObjectsResult = $this->get_resultsSQL("SELECT * FROM EnergyObjects");
+            $energyObjectsResult = $this->selectRootEnergyObjects();
+        }
+        else {
+            //$energyObjectsResult = $this->get_resultsSQL($this->wpdb->prepare("SELECT * FROM EnergyObjects WHERE customer_id = %d", $user_id));
+            //$energyObjectsList = $this->selectNestedEnergyObjects($energyObject_id);
+            //$currentValue = $this->selectEnergyObjectValue();
+            $energyObjectsResult = $this->selectEnergyObjectsForAccount($user_id);
+        }
+
+        if($energyObjectsResult) {
+            foreach($energyObjectsResult as $energyObjectRow) {
+                $currentValue += $this->selectEnergyObjectValue($energyObjectRow, $user_id);
+            }
+        }
+
+        return $currentValue;
     }
 
     // ----------------================ Data modifiers ===============------------------
