@@ -1,6 +1,7 @@
 <?php
 
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
+if($_SERVER['CONTEXT_DOCUMENT_ROOT']) require_once( $_SERVER['CONTEXT_DOCUMENT_ROOT'] . '/wp-load.php');
+else require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
 
 global $wpdb;
 

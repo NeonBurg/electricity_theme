@@ -12,9 +12,9 @@ require_once(ASKUE_PLUGIN_DIR . "models/Customer.php");
 
 global $wpdb;
 $dataController = new DataController($wpdb);
-$energyObjectsList = $dataController->selectEnergyObjects();
 $customersList = $dataController->selectCustomersList();
 $metersList = $dataController->selectMetersList();
+$energyObjectsList = array();
 
 $edit_energy_object = null;
 $edit_energy_object_owner = null;
@@ -24,10 +24,13 @@ $edit_meter = null;
 if(isset($_GET["edit"])) {
     require_once(ASKUE_PLUGIN_DIR . "models/EnergyObject.php");
     $energy_object_id = $_GET["edit"];
+    $energyObjectsList = $dataController->selectEnergyObjects($energy_object_id);
     $edit_energy_object = $dataController->selectEnergyObject($energy_object_id);
     $edit_energy_object_owner = $dataController->selectCustomer($edit_energy_object->getCustomerId());
     $edit_energy_object_parent = $dataController->selectEnergyObject($edit_energy_object->getEnergyObjectId());
     $edit_meter = $dataController->selectMeter($edit_energy_object->getMeterId());
+} else {
+    $energyObjectsList = $dataController->selectEnergyObjects();
 }
 
 ?>
@@ -110,7 +113,7 @@ if(isset($_GET["edit"])) {
                         <input list="owners_list" name="object_owner_input" id="object_owner_input" class="askue-list-input" placeholder="Выберите владельца счетчика" autocomplete="off" <?php if($edit_energy_object_owner) echo 'value="'.$edit_energy_object_owner->getLogin().' - '.$edit_energy_object_owner->getName().'"';?>>
                         <datalist id="owners_list">
                             <?php foreach ($customersList as $customer): ?>
-                                <option value="<?=$customer->getLogin() . ' - ' . $customer->getName();?>"></option>
+                                <option value="<?=$customer->getLogin() . ' - ' . $customer->getSurname(). ' ' .$customer->getName(). ' ' . $customer->getPatronymic();;?>"></option>
                             <?php endforeach; ?>
                         </datalist>
 
@@ -138,6 +141,9 @@ if(isset($_GET["edit"])) {
                                 <option value="<?=$energyObject->getName();?>"></option>
                             <?php endforeach; ?>
                         </datalist>
+                        <?php if($edit_energy_object):?>
+                            <input type="hidden" id="edit_energy_object_parent_id" name="edit_energy_object_parent_id" <?php if($edit_energy_object_parent) echo 'value="'.$edit_energy_object_parent->getId().'"'; else echo 'value=0'?>>
+                        <?php endif;?>
 
                         <!-- Energy Object icon: -->
                         <div class="icon-status-container">

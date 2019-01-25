@@ -6,9 +6,12 @@
  * Time: 12:12
  */
 
-include($_SERVER['DOCUMENT_ROOT'] . "/user_room/registration/check_login.php");
-include($_SERVER['DOCUMENT_ROOT'] . "/user_room/registration/check_pass.php");
-include($_SERVER['DOCUMENT_ROOT'] . "/user_room/registration/check_pass_repeat.php");
+if($_SERVER['CONTEXT_DOCUMENT_ROOT']) $path = $_SERVER['CONTEXT_DOCUMENT_ROOT'];
+else $path = $_SERVER['DOCUMENT_ROOT'];
+
+include($path . "/user_room/registration/check_login.php");
+include($path . "/user_room/registration/check_pass.php");
+include($path . "/user_room/registration/check_pass_repeat.php");
 
 include(ASKUE_PLUGIN_DIR . "pages/accounts_manage/add_user/check_name.php");
 include(ASKUE_PLUGIN_DIR . "pages/accounts_manage/add_user/check_surname.php");
@@ -16,7 +19,7 @@ include(ASKUE_PLUGIN_DIR . "pages/accounts_manage/add_user/check_patronymic.php"
 include(ASKUE_PLUGIN_DIR . "pages/accounts_manage/add_user/check_phone.php");
 include(ASKUE_PLUGIN_DIR . "pages/accounts_manage/add_user/check_email.php");
 
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/user_room/utils/encrypt.php' );
+require_once( $path . '/user_room/utils/encrypt.php' );
 
 if($wpdb) {
 

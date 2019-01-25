@@ -1,5 +1,6 @@
 <?php
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
+if($_SERVER['CONTEXT_DOCUMENT_ROOT']) require_once( $_SERVER['CONTEXT_DOCUMENT_ROOT'] . '/wp-load.php');
+else require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
 
     $fields_count = $_POST["fields_count"];
     $meter_id = $_POST["meter_id"];

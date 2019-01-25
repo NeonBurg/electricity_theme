@@ -341,7 +341,7 @@ h1 a:hover {
 .add_group_button_wrap {
     display:inline-block;
     float:right;
-    margin: 10px 0;
+    margin-top:15px;
 }
 
 .accounts_container {
@@ -564,4 +564,24 @@ h1 a:hover {
 
 .statistics-value {
     font-size: 18pt;
+}
+
+.pages_nums {
+    display: inline-block;
+}
+
+.pages_nums:hover {
+    cursor: pointer;
+}
+
+#pages_row {
+    margin-bottom: 10px;
+}
+
+#pages_row a {
+    color: black;
+}
+
+#pages_row a:hover {
+    text-decoration: underline;
 }

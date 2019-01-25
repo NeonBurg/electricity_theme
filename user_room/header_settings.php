@@ -6,19 +6,20 @@
  * Time: 9:55
  */
 
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/user_room/utils/encrypt.php' );
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/user_room/utils/check.php' );
+require_once( ABSPATH . '/user_room/utils/encrypt.php' );
+require_once( ABSPATH . '/user_room/utils/check.php' );
 
 global $wpdb;
 
 if(!$wpdb) {
     //echo "!wpdb";
-    header("location: /user_room_page/auth/?err=Отсутсвует соединение с базой данных");
+    header("location:" . site_url('/user-room/auth/?err=Отсутсвует соединение с базой данных'));
 }
 else {
     $access_level = checkAuth($wpdb);
+    define('ACCESS_LEVEL', $access_level);
     if($access_level == -1) {
-        header("location: /user_room_page/auth/");
+        header(("location: " . site_url('/user-room/auth/')));
     }
 }
 

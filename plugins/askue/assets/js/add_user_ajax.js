@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
 
     var counterKeys = 0;
 
-    var success_fields = [false, false, false, false, false, false, false, true, false];
+    var success_fields = [false, false, false, false, false, false, false, true, true];
 
     var edit_user_id = null;
     var groupInputOldVal = '';
@@ -149,7 +149,7 @@ jQuery(document).ready(function($) {
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
         //makeAjaxPost(0, "../../user_room/registration/check_login.php", $form_data, login_error_message, login_status_icon);
-        makeAjaxPost(0, "/user_room/registration/check_login.php", $form_data, login_error_message, login_status_icon);
+        makeAjaxPost(0, myScript.site_url + "/user_room/registration/check_login.php", $form_data, login_error_message, login_status_icon);
         counterKeys = 0;
     }
 
@@ -309,10 +309,10 @@ jQuery(document).ready(function($) {
             //console.log('registration success');
             //console.log(response);
             if(myScript.is_admin) {
-                window.location.replace("/wp-admin/admin.php?page=accounts_manage");
+                window.location.replace(myScript.site_url + "/wp-admin/admin.php?page=accounts_manage");
             }
             else {
-                window.location.replace("/user-room/accounts-management/");
+                window.location.replace(myScript.site_url + "/user-room/accounts-management/");
             }
 
         }).fail(function(data) {

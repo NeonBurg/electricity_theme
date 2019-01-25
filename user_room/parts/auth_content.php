@@ -40,7 +40,7 @@
     }*/
 ?>
 
-<form method="post" action="../../user_room/form_actions/authenticate.php">
+<form method="post" action="<?=site_url('/user_room/form_actions/authenticate.php')?>">
     <table align="center" class="login_table">
         <tr align="center">
             <td width="19%">
@@ -67,7 +67,7 @@
     <table align="center" class="registration_line_table">
         <tr>
             <td>
-                <a href="/user_room_page/registration/" class="registration_link">Регистрация нового пользователя</a>
+                <a href="<?=site_url('/user-room/registration/')?>" class="registration_link">Регистрация нового пользователя</a>
             </td>
         </tr>
         <tr>

@@ -112,7 +112,7 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(0, "../../user_room/registration/check_login.php", $form_data, login_error_message, login_status_icon);
+        makeAjaxPost(0, myScript.site_url + "/user_room/registration/check_login.php", $form_data, login_error_message, login_status_icon);
         counterKeys = 0;
     }
 
@@ -123,7 +123,7 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(1, "../../user_room/registration/check_pass.php", $form_data, password_error_message, password_status_icon);
+        makeAjaxPost(1, myScript.site_url + "/user_room/registration/check_pass.php", $form_data, password_error_message, password_status_icon);
         counterKeys = 0;
     }
 
@@ -134,7 +134,7 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(2, "../../user_room/registration/check_pass_repeat.php", $form_data, repeat_password_error_message, repeat_password_status_icon);
+        makeAjaxPost(2, myScript.site_url + "/user_room/registration/check_pass_repeat.php", $form_data, repeat_password_error_message, repeat_password_status_icon);
         counterKeys = 0;
     }
 
@@ -145,7 +145,7 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(3, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_surname.php", $form_data, surname_error_message, surname_status_icon);
+        makeAjaxPost(3, myScript.site_url + "/wp-content/plugins/askue/pages/accounts_manage/add_user/check_surname.php", $form_data, surname_error_message, surname_status_icon);
         counterKeys = 0;
     }
 
@@ -156,7 +156,7 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(4, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_name.php", $form_data, name_error_message, name_status_icon);
+        makeAjaxPost(4, myScript.site_url + "/wp-content/plugins/askue/pages/accounts_manage/add_user/check_name.php", $form_data, name_error_message, name_status_icon);
         counterKeys = 0;
     }
 
@@ -167,7 +167,7 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(5, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_patronymic.php", $form_data, patronymic_error_message, patronymic_status_icon);
+        makeAjaxPost(5, myScript.askue_plugin_url + "/askue/pages/accounts_manage/add_user/check_patronymic.php", $form_data, patronymic_error_message, patronymic_status_icon);
         counterKeys = 0;
     }
 
@@ -178,7 +178,7 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(6, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_phone.php", $form_data, phone_error_message, phone_status_icon);
+        makeAjaxPost(6, myScript.askue_plugin_url + "/askue/pages/accounts_manage/add_user/check_phone.php", $form_data, phone_error_message, phone_status_icon);
         counterKeys = 0;
     }
 
@@ -189,7 +189,7 @@ jQuery(document).ready(function($) {
 
         //var edit_meter_name = document.getElementById("edit_meter_name");
 
-        makeAjaxPost(7, "../../wp-content/plugins/askue/pages/accounts_manage/add_user/check_email.php", $form_data, email_error_message, email_status_icon);
+        makeAjaxPost(7, myScript.askue_plugin_url + "/askue/pages/accounts_manage/add_user/check_email.php", $form_data, email_error_message, email_status_icon);
         counterKeys = 0;
     }
 
@@ -222,11 +222,11 @@ jQuery(document).ready(function($) {
 
                 $.ajax({
                     type: 'POST',
-                    url: '/user_room/registration/final_check.php',
+                    url: myScript.site_url + '/user_room/registration/final_check.php',
                     data: formData
                 }).done(function(response) {
                     console.log('registration success');
-                    window.location.replace("/user_room_page/auth/?login='.$login.'&registration_success=Успешная регистрация");
+                    window.location.replace(myScript.site_url + "/user-room/auth/?login='.$login.'&registration_success=Успешная регистрация");
 
                 }).fail(function(data) {
                     console.log('registration error!');

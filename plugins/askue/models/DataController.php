@@ -131,11 +131,17 @@ class DataController
 
 
     // ----------- Получим список с энергетическими объектами -----------
-    public function selectEnergyObjects() {
+    public function selectEnergyObjects($energyObject_id = -1) {
 
         $energy_objects_list = array();
 
-        $results = $this->get_resultsSQL("SELECT * FROM EnergyObjects");
+        if($energyObject_id == -1) {
+            $results = $this->get_resultsSQL("SELECT * FROM EnergyObjects");
+        }
+        else {
+            $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT * FROM EnergyObjects WHERE id != %d", $energyObject_id));
+        }
+
         if($results != null) {
             foreach ($results as $result_row) {
                 $energyObject = new EnergyObject($result_row);
@@ -143,8 +149,12 @@ class DataController
                 $meters_result = $this->selectMetersList($energyObject->getId());
                 $energyObject->setMetersList($meters_result);
 
-
-
+                /*if($energyObject_id != -1 && $energyObject->getEnergyObjectId() != $energyObject_id) {
+                    $energy_objects_list[] = $energyObject;
+                }
+                else if($energyObject_id == -1) {
+                    $energy_objects_list[] = $energyObject;
+                }*/
                 $energy_objects_list[] = $energyObject;
             }
         }
@@ -233,11 +243,18 @@ class DataController
 
 
     // ----------- Получим список с данными о клиентах ------------
-    public function selectCustomersList() {
+    public function selectCustomersList($page_number=-1, $items_on_page=-1) {
 
         $customers_list = array();
+        $offset = 0;
 
-        $select_query = "SELECT Customers.*, user_room_accounts.login FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id";
+        if($page_number!=-1) {
+            $offset = $items_on_page * ($page_number - 1);
+            $select_query = $this->wpdb->prepare("SELECT Customers.*, user_room_accounts.login FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id LIMIT %d, %d", $offset, $items_on_page);
+        }
+        else {
+            $select_query = "SELECT Customers.*, user_room_accounts.login FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id";
+        }
 
         $results = $this->get_resultsSQL($select_query);
 
@@ -327,10 +344,16 @@ class DataController
     }
 
     // -------------- Получим корневые энергетические объекты -----------------
-    public function selectRootEnergyObjects() {
+    public function selectRootEnergyObjects($user_id=-1) {
         $energy_objects_list = array();
 
-        $results = $this->get_resultsSQL("SELECT * FROM EnergyObjects WHERE energyObject_id IS NULL");
+        if($user_id == -1) {
+            $results = $this->get_resultsSQL("SELECT * FROM EnergyObjects WHERE energyObject_id IS NULL OR energyObject_id = 0");
+        }
+        else {
+            $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT * FROM EnergyObjects WHERE energyObject_id IS NULL AND customer_id = %d", $user_id));
+        }
+
         if($results != null) {
             foreach ($results as $result_row) {
                 $energyObject = new EnergyObject($result_row);
@@ -376,23 +399,11 @@ class DataController
         $meter_values_list = array();
 
         $iterator_date = new DateTime(date_format($from_date, 'd.m.Y H:i'));
-        //echo "iterator_date = " . date_format($iterator_date, 'd.m.Y H:i');
-        //$iterator_date = new DateTime(date_format($to_date, 'd.m.Y H:i'));
-
-        $meter_first_value = $this->selectMeterFirstValue($meter_id);
-        //$first_date = new DateTime($meter_first_value->getDate());
-
-        /*if($iterator_date < $first_date) {
-            $iterator_date = new DateTime(date_format($first_date, 'd.m.Y H:i'));
-        }*/
-
-        //echo "date_to" . date_format($to_date, 'd.m.Y H:i');
 
         $next_date = new DateTime(date_format($iterator_date, 'd.m.Y H:i'));
 
         $date_format_style = '';
         $statement_sign = '';
-        //$last_date = new DateTime();
 
         switch ($interval) {
             case self::MINUTES_30:
@@ -477,7 +488,7 @@ class DataController
 
         //echo "date_to = " . date_format($to_date, 'd.m.Y H:i');
 
-        $meter_values_list[] = [date_format($iterator_date, $date_format_style), 0];
+        $meter_values_list[] = [date_format($to_date, $date_format_style), 0];
 
         return $meter_values_list;
     }
@@ -506,16 +517,23 @@ class DataController
 
         $meters_values_list = array();
         $energyObjectValue = 0;
+
+        $meters_values_list = array_merge($meters_values_list, $this->selectEnergyObjectMeterValues($energyObject->getId(), $energyObject->getMeterId()));
+
         if($user_id==-1) {
             $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT id, meter_id FROM EnergyObjects WHERE energyObject_id = %d", $energyObject->getId()));
         }
         else {
-            $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT id, meter_id FROM EnergyObjects WHERE energyObject_id = %d AND customer_id = %s", $energyObject->getId(), $user_id));
+            $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT id, meter_id FROM EnergyObjects WHERE energyObject_id = %d AND customer_id = %d", $energyObject->getId(), $user_id));
         }
 
-        $meters_values_list = array_merge($meters_values_list, $this->selectEnergyObjectMeterValues($energyObject->getId(), $energyObject->getMeterId()));
+        if($results) {
+            foreach($results as $result) {
+                $energyObjectValue += $this->selectEnergyObjectValue($this->selectEnergyObject($result->id));
+            }
+        }
 
-        while($results) {
+        /*while($results) {
 
             foreach($results as $result_row) {
                 $meters_values_list = array_merge($meters_values_list, $this->selectEnergyObjectMeterValues($result_row->id, $result_row->meter_id));
@@ -525,9 +543,9 @@ class DataController
                 $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT id, meter_id FROM EnergyObjects WHERE energyObject_id = %d", $result_row->id));
             }
             else {
-                $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT id, meter_id FROM EnergyObjects WHERE energyObject_id = %d AND customer_id = %s", $result_row->id, $user_id));
+                $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT id, meter_id FROM EnergyObjects WHERE energyObject_id = %d AND customer_id = %d", $result_row->id, $user_id));
             }
-        }
+        }*/
 
         foreach($meters_values_list as $meter_value) {
             if($meter_value != null) $energyObjectValue += $meter_value->getValue();
@@ -536,11 +554,11 @@ class DataController
         return $energyObjectValue;
     }
 
-    public function selectEnergyObjectMeterValues($energyObject_id, $energyObjectMeter_id=-1) {
+    public function selectEnergyObjectMeterValues($energyObject_id, $energyObjectMeter_id=null) {
 
         $energy_object_meter_values = array();
         $query_sql = '';
-        if($energyObjectMeter_id == -1) {
+        if($energyObjectMeter_id == null) {
             $query_sql = $this->wpdb->prepare("SELECT id FROM Meters WHERE energyObject_id = %d", $energyObject_id);
         }
         else {
@@ -570,7 +588,7 @@ class DataController
             //$energyObjectsResult = $this->get_resultsSQL($this->wpdb->prepare("SELECT * FROM EnergyObjects WHERE customer_id = %d", $user_id));
             //$energyObjectsList = $this->selectNestedEnergyObjects($energyObject_id);
             //$currentValue = $this->selectEnergyObjectValue();
-            $energyObjectsResult = $this->selectEnergyObjectsForAccount($user_id);
+            $energyObjectsResult = $this->selectRootEnergyObjects($user_id);
         }
 
         if($energyObjectsResult) {
@@ -580,6 +598,18 @@ class DataController
         }
 
         return $currentValue;
+    }
+
+    public function countPages($items_on_page) {
+
+        $pages = 0;
+
+        $count_items = $this->get_varSQL("SELECT COUNT(*) as count FROM user_room_accounts");
+        if(!empty($count_items)) {
+            $pages = ceil($count_items/$items_on_page);
+        }
+
+        return $pages;
     }
 
     // ----------------================ Data modifiers ===============------------------

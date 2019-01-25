@@ -11,7 +11,7 @@ $dataController = new DataController($wpdb);
 //$energyObjectsList = $dataController->selectEnergyObjects();
 $energyObjectsList = $dataController->selectRootEnergyObjects();
 
-if(is_admin()) $access_level = 3;
+if(is_admin()) define('ACCESS_LEVEL', 3);
 ?>
 
 <h1>Автоматизированная система контроля и учета электроэнергии (АСКУЭ)</h1>

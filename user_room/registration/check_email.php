@@ -6,7 +6,10 @@
  * Time: 18:56
  */
 
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
+if($_SERVER['CONTEXT_DOCUMENT_ROOT']) $path = $_SERVER['CONTEXT_DOCUMENT_ROOT'];
+else $path = $_SERVER['DOCUMENT_ROOT'];
+
+require_once( $path . '/wp-load.php');
 
 // Only process POST reqeusts.
 //if ($_SERVER["REQUEST_METHOD"] == "POST") {

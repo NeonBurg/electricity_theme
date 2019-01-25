@@ -13,7 +13,7 @@
 
     global $wpdb;
     $dataController = new DataController($wpdb);
-    if(is_admin()) $access_level = 3;
+    if(is_admin()) define("ACCESS_LEVEL", 3);
 
     $meter = null;
     $meterValuesList = array();
@@ -30,7 +30,10 @@
             if($meter_last_value != null) {
                 $meter_last_date = $meter_last_value->getDate();
             }
-            $currentValue = $dataController->selectMeterLastValue($meter_id)->getValue();
+            $meterLastValue = $dataController->selectMeterLastValue($meter_id);
+            if($meterLastValue) {
+                $currentValue = $dataController->selectMeterLastValue($meter_id)->getValue();
+            }
         }
     }
 
@@ -56,7 +59,7 @@
             bottom: 20px;
             left: 15px;
             color: #575757;
-            font-size: 10pt;
+            font-size: 9pt;
             font-family: 'Open Sans', sans-serif;
         }
 
@@ -114,24 +117,30 @@
                     <tr>
                         <th width="33%" style="text-align:left; padding-left:10px;">Значение</th>
                         <th>Дата</th>
-                        <?php if($access_level == 3): ?>
+                        <?php if(ACCESS_LEVEL == 3): ?>
                             <th width="6%"></th>
                         <?php endif; ?>
                     </tr>
 
                     <?php foreach ($meterValuesList as $meterValue):?>
+
+                        <?php
+                            $value_edit_url_admin = site_url('/wp-admin/admin.php?page=add_meter_value&meter='.$meter->getId().'&edit='.$meterValue->getId());
+                            $value_edit_url_user_room = site_url('/user-room/meters-management/meter-details/add-meter-value?meter='.$meter->getId().'&edit='.$meterValue->getId());
+                        ?>
+
                         <tr>
                             <td style="text-align:left; padding-left:10px;"><?php echo $meterValue->getValue();?></td>
                             <td><?=$meterValue->getFormattedDate();?></td>
 
-                            <?php if($access_level == 3): ?>
+                            <?php if(ACCESS_LEVEL == 3): ?>
                                 <td>
                                     <div style="padding-top:6px;">
                                         <div style="display: inline-block;">
                                             <?php if(is_admin()): ?>
-                                                <div class="edit-button" onclick="location.href='/wp-admin/admin.php?page=add_meter_value&meter=<?=$meter->getId();?>&edit=<?=$meterValue->getId();?>'"></div>
+                                                <div class="edit-button" onclick="location.href='<?=$value_edit_url_admin?>'"></div>
                                             <?php else: ?>
-                                                <div class="edit-button" onclick="location.href='/user-room/meters-management/meter-details/add-meter-value?meter=<?=$meter->getId();?>&edit=<?=$meterValue->getId();?>'"></div>
+                                                <div class="edit-button" onclick="location.href='<?=$value_edit_url_user_room?>'"></div>
                                             <?php endif; ?>
                                         </div>
                                         <div style="display: inline-block; padding-left:5px;">
@@ -156,8 +165,8 @@
         </div>
     </div>
 
-    <?php if($access_level == 3): ?>
-        <div style="width:100%; display: inline-block;"><div class="add_group_button_wrap"><div class="askue-button" onclick="<?php if(is_admin()) echo "location.href='/wp-admin/admin.php?page=add_meter_value&meter=".$meter->getId()."'"; else echo "location.href='/user-room/meters-management/meter-details/add-meter-value?meter=".$meter->getId()."'"; ?>">Добавить показания</div></div></div>
+    <?php if(ACCESS_LEVEL == 3): ?>
+        <div style="width:100%; display: inline-block;"><div class="add_group_button_wrap"><div class="askue-button" onclick="<?php if(is_admin()) echo "location.href='".site_url('/wp-admin/admin.php?page=add_meter_value&meter='.$meter->getId())."'"; else echo "location.href='".site_url('/user-room/meters-management/meter-details/add-meter-value?meter='.$meter->getId())."'"; ?>">Добавить показания</div></div></div>
     <?php endif; ?>
 </div>
 

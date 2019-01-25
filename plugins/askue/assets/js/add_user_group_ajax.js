@@ -69,10 +69,10 @@ jQuery(document).ready(function($) {
         }).done(function(response) {
             //console.log(response);
             if(myScript.is_admin) {
-                window.location.replace("/wp-admin/admin.php?page=accounts_manage");
+                window.location.replace(myScript.site_url + "/wp-admin/admin.php?page=accounts_manage");
             }
             else {
-                window.location.replace("/user-room/accounts-management/");
+                window.location.replace(myScript.site_url + "/user-room/accounts-management/");
             }
         }).fail(function(data) {
             console.log('add meter error!');

@@ -362,9 +362,10 @@ ul.custom_left_menu li.current-menu-item > a:hover {
 	background: #e9e9e9;
 }
 
-.registation-content {
+.registration-content {
 	max-width:900px;
 	margin:auto;
+	margin-top: 20px;
 }
 
 .req_field {

@@ -61,11 +61,13 @@ class askue
 
         wp_localize_script('donetype_script', 'myScript', array(
             'askue_plugin_url' => plugins_url(),
-            'is_admin' => is_admin()
+            'is_admin' => is_admin(),
+            'site_url' => get_site_url()
         ));
 
         wp_localize_script('delete_ajax', 'myScript', array(
-            'askue_plugin_url' => plugins_url()
+            'askue_plugin_url' => plugins_url(),
+            'site_url' => get_site_url()
         ));
     }
 
@@ -125,7 +127,7 @@ class askue
     }*/
 
     static function install() {
-        require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
+        //require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
         global $wpdb;
 
 // Create ASKUE tables

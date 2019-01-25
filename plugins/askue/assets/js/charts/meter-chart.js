@@ -165,12 +165,16 @@
                         }
                         //char_label_width = parseInt($(this).css("width"));
                     });
-                    document.getElementById("last-chart-category").innerHTML = "";
+                    //document.getElementById("last-chart-category").innerHTML = "";
+
+                    //document.getElementById("last-chart-category").innerHTML = last_val; //<---- Last_val
                 }
-                else {
+                /*else {
                     //last-chart-category
                     document.getElementById("last-chart-category").innerHTML = last_val;
-                }
+                }*/
+
+                document.getElementById("last-chart-category").innerHTML = last_val;
 
                 //console.log('char_label_height = ' + chart_label_height);
 
@@ -179,9 +183,11 @@
                         document.getElementById("last-chart-category").style.bottom = "38px";
                     }
                     else {
-                        document.getElementById("last-chart-category").style.width = "100px";
                         document.getElementById("last-chart-category").style.bottom = "20px";
                     }
+
+                //document.getElementById("last-chart-category").innerHTML = date_to_input.value;
+
             }
 
 

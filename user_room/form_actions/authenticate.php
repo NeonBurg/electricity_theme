@@ -1,7 +1,10 @@
 <?php
-    require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
-    require_once( $_SERVER['DOCUMENT_ROOT'] . '/user_room/utils/encrypt.php' );
-    require_once( $_SERVER['DOCUMENT_ROOT'] . '/user_room/utils/errorMessage.php' );
+    if($_SERVER['CONTEXT_DOCUMENT_ROOT']) $path = $_SERVER['CONTEXT_DOCUMENT_ROOT'];
+    else $path = $_SERVER['DOCUMENT_ROOT'];
+
+    require_once( $path . '/wp-load.php');
+    require_once( $path . '/user_room/utils/encrypt.php' );
+    require_once( $path . '/user_room/utils/errorMessage.php' );
 
     $login = trim($_POST['login_input']);
     $password = trim($_POST['pass_input']);
@@ -66,11 +69,11 @@
 
                 $result = $wpdb->get_row("SELECT session_hash FROM user_room_accounts WHERE id = ".$s_user_id);
                 if($result->session_hash) {
-                    header("location: /user-room/");
+                    header("location: ".site_url('/user-room/'));
                 }
                 else {
                     $err[] = "Ошибка UPDATE user_room_accounts";
-                    header("location: /user-room/auth/?login=".$login."&err=".$err[0]);
+                    header("location: ".site_url('/user-room/auth/?login='.$login.'&err='.$err[0]));
                 }
 
                 //echo "auth success";
@@ -79,15 +82,15 @@
             // Есть ошибки:
             else {
                 //echo "s_user_id = " . $s_user_id . " | s_login = " . $s_login;
-                header("location: /user-room/auth/?login=".$login."&err=".$err[0]);
+                header("location: ".site_url('/user-room/auth/?login='.$login.'&err='.$err[0]));
             }
         }
         else {
             $err[] = "Неверный логин";
-            header("location: /user-room/auth/?login=".$login."&err=".$err[0]);
+            header("location: ".site_url('/user-room/auth/?login='.$login.'&err='.$err[0]));
         }
     }
     else {
-        header("location: /user-room/auth/?login=".$login."&err=".'Отсутсвует соединение с базой данных');
+        header("location: ".site_url('/user-room/auth/?login='.$login.'&err="Отсутсвует соединение с базой данных"'));
     }
 ?>

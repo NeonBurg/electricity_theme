@@ -6,7 +6,9 @@
  * Time: 12:56
  */
 
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
+if($_SERVER['CONTEXT_DOCUMENT_ROOT']) require_once( $_SERVER['CONTEXT_DOCUMENT_ROOT'] . '/wp-load.php');
+else require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
+
 include(ASKUE_PLUGIN_DIR . "pages/add_meter/check_name.php");
 include(ASKUE_PLUGIN_DIR . "pages/add_meter/check_meter_num.php");
 include(ASKUE_PLUGIN_DIR . "pages/add_meter/check_object.php");

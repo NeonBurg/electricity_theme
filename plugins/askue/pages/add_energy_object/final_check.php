@@ -6,7 +6,9 @@
  * Time: 13:21
  */
 
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
+if($_SERVER['CONTEXT_DOCUMENT_ROOT']) require_once( $_SERVER['CONTEXT_DOCUMENT_ROOT'] . '/wp-load.php');
+else require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
+
 include(ASKUE_PLUGIN_DIR . "pages/add_energy_object/check_name.php");
 include(ASKUE_PLUGIN_DIR . "pages/add_energy_object/check_address.php");
 include(ASKUE_PLUGIN_DIR . "pages/add_energy_object/check_owner.php");
@@ -25,7 +27,16 @@ if($wpdb) {
             $wpdb->query($wpdb->prepare("UPDATE Meters SET energyObject_id = %d WHERE id = %d", $edit_energy_object_id, $meter_id));
         }
 
+        $parent_id = 0;
+        if($_POST["edit_energy_object_parent_id"]) {
+            $parent_id = $_POST["edit_energy_object_parent_id"];
+        }
+
         $sql_update_meter = $wpdb->prepare("UPDATE EnergyObjects SET name=%s, address=%s, customer_id=%s, energyObject_id=".$energy_object_id.", meter_id=".$meter_id." WHERE id = %d", $object_name, $object_address, $customer_id, $edit_energy_object_id);
+
+        if(strcmp($energy_object_id, $parent_id) != 0) {
+            $wpdb->query($wpdb->prepare("UPDATE EnergyObjects SET energyObject_id = %d WHERE id = %d AND energyObject_id = %d", $parent_id, $energy_object_id, $edit_energy_object_id));
+        }
 
         $wpdb->query($sql_update_meter);
 

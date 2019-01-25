@@ -236,10 +236,10 @@ jQuery(document).ready(function($) {
         }).done(function(response) {
             //console.log(response);
             if(myScript.is_admin) {
-                window.location.replace("/wp-admin/admin.php?page=askue_menu");
+                window.location.replace(myScript.site_url + "/wp-admin/admin.php?page=askue_menu");
             }
             else {
-                window.location.replace("/user-room/meters-management/");
+                window.location.replace(myScript.site_url + "/user-room/meters-management/");
             }
         }).fail(function(data) {
             console.log('add meter error!');

@@ -94,12 +94,7 @@
                     url: action,
                     data: form_data
                 }).done(function(response) {
-                    if(myScript.is_admin) {
-                        window.location.href = '/wp-admin/admin.php?page=meter_details&meter=' + $("#meter_id").val();
-                    }
-                    else {
-                        window.location.href = '/user-room/meters-management/meter-details?meter=' + $("#meter_id").val();
-                    }
+                    window.location.href = $("#meter_link").val();
                 }).fail(function(data) {
                     if (data.responseText !== '') {
                         console.log('response: ' + data.responseText);
@@ -114,11 +109,12 @@
         <!--<a href="/user-room/meters-management/meter-details?meter=<?=$meter_id?>">Счетчик '<?=$meter->getName();?>'</a> »-->
         <?php
             if(is_admin()) {
-                $link = '/wp-admin/admin.php?page=meter_details&meter='.$meter_id;
+                $link = site_url('/wp-admin/admin.php?page=meter_details&meter='.$meter_id);
             }
             else {
-                $link = '/user-room/meters-management/meter-details?meter='.$meter_id;
+                $link = site_url('/user-room/meters-management/meter-details?meter='.$meter_id);
             }
+
             echo '<a href="'.$link.'">Счетчик \''.$meter->getName().'\'</a> » ';
             if($edit_meter_value)
                 echo 'Редактирование показаний';
@@ -136,6 +132,7 @@
 <!-- Форма добавления нового счетчика -->
 <form method="post" action="" id="ajax-add-meter-value">
     <input type="hidden" name="meter_id" id="meter_id" value="<?=$meter_id;?>">
+    <input type="hidden" id="meter_link" value="<?=$link?>">
     <?php if($edit_meter_value) {
         echo '<input type="hidden" id="edit_value_id" name="edit_value_id" value="' . $edit_meter_value->getId() . '">';
         echo '<input type="hidden" id="edit_value_val" name="edit_value_val" value="' . $edit_meter_value->getValue() . '">';

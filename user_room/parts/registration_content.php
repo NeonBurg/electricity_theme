@@ -6,7 +6,7 @@
 <?php wp_enqueue_script('registration_ajax'); ?>
 
 
-<div class="registation-content">
+<div class="registration-content">
 <table class="registration_table_main" align="center" cellpadding="0" cellspacing="0">
     <tr>
         <td align="center">

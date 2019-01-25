@@ -4,7 +4,7 @@ require_once(ASKUE_PLUGIN_DIR . "models/DataController.php");
 
 global $wpdb;
 $dataController = new DataController($wpdb);
-if(is_admin()) $access_level = 3;
+if(is_admin()) define("ACCESS_LEVEL", 3);
 
 ?>
 
