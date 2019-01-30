@@ -46,6 +46,8 @@ class askue
     public static function admin_init_func() {
         wp_enqueue_style('askue_style', plugins_url('css/askue-style.css',__FILE__), array(), null, 'all');
 
+        wp_enqueue_script('jqeury', get_template_directory_uri(). '/assets/js/jquery-3.3.1.min.js', array(), null, 'all');
+
         wp_register_script('donetype_script', get_template_directory_uri(). '/assets/js/donetype_script.js', array(), null, true);
         wp_register_script('add_meter_ajax', plugins_url('assets/js/add_meter_ajax.js', __FILE__), array(), null, true);
         wp_register_script('add_energy_object_ajax', plugins_url('assets/js/add_energy_object_ajax.js', __FILE__), array(), null, true);
@@ -53,6 +55,8 @@ class askue
         wp_register_script('add_user_group_ajax', plugins_url('assets/js/add_user_group_ajax.js', __FILE__), array(), null, true);
         wp_register_script('add_user_ajax', plugins_url('assets/js/add_user_ajax.js', __FILE__), array(), null, true);
         wp_register_script('delete_ajax', plugins_url('assets/js/delete_ajax.js', __FILE__), array(), null, true);
+
+        wp_register_script('accounts_page_ajax', plugins_url('assets/js/accounts_page_ajax.js', __FILE__), array(), null, true);
 
         wp_register_script('jquery_flot', plugins_url('assets/js/charts/jquery.flot.min.js', __FILE__), array(), null, true);
         wp_register_script('flot_stack', plugins_url('assets/js/charts/jquery.flot.stack.js', __FILE__), array(), null, true);
@@ -67,6 +71,7 @@ class askue
 
         wp_localize_script('delete_ajax', 'myScript', array(
             'askue_plugin_url' => plugins_url(),
+            'is_admin' => is_admin(),
             'site_url' => get_site_url()
         ));
     }

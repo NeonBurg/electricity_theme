@@ -12,15 +12,19 @@ require_once(ASKUE_PLUGIN_DIR . "models/DataController.php");
 
             $page_num = $_POST["page_num"];
             $items_on_page = $_POST["items_on_page"];
+            $search_filter = null;
+            if(isset($_POST["search_filter"])) {
+                $search_filter = $_POST["search_filter"];
+            }
 
             $dataController = new DataController($wpdb);
 
-            $count_pages = $dataController->countPages($items_on_page);
+            $count_pages = $dataController->countPages($items_on_page, $search_filter);
             if($page_num > $count_pages || $page_num == 0) {
                 $page_num = $count_pages;
             }
 
-            $accounts_list = $dataController->selectCustomersList($page_num, $items_on_page);
+            $accounts_list = $dataController->selectCustomersList($page_num, $items_on_page,  $search_filter);
             $json_accounts_list;
 
 

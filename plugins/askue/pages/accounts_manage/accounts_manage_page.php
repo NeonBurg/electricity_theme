@@ -1,5 +1,8 @@
 <?php
 wp_enqueue_script('delete_ajax');
+wp_enqueue_script('donetype_script');
+wp_enqueue_script('accounts_page_ajax');
+
 require_once(ASKUE_PLUGIN_DIR . "models/DataController.php");
 
 global $wpdb;

@@ -1,116 +1,8 @@
-<?php
-/*$page_num = 1;
-$items_on_page = 5;
-
-$pages = $dataController->countPages($items_on_page);
-
-if(isset($_GET["page_number"])) {
-    $page_num = $_GET["page_number"];
-}
-else {
-    if($pages !=0) {
-        $page_num = $pages;
-    }
-}*/
-
-?>
-
-
 <script type="text/javascript">
 
 var pages = 0;
 var current_page_num = 0;
 var items_on_page = 0;
-
-function change_page(page_num) {
-
-    console.log('change_page: ' + page_num + 'items_on_page: ' + items_on_page);
-    current_page_num = page_num;
-
-    $form_data = {'page_num': current_page_num, 'items_on_page': items_on_page};
-    $form_action = myScript.askue_plugin_url + '/askue/pages/accounts_manage/change_page.php';
-    changePageAjax($form_action, $form_data);
-}
-
-
-// --------------- Обновляем список аккаунтов с пользователями -----------------
-function update_list(updated_accounts_list) {
-
-    //console.log(updated_accounts_list);
-
-    $accounts_table_html = '';
-
-    $new_pages_count = updated_accounts_list.pop();
-
-    //console.log('update_list pages: ' + $new_pages_count);
-
-    if(pages !== $new_pages_count) {
-        pages = $new_pages_count;
-        updateSelectOptions();
-    }
-
-    if(current_page_num > pages || current_page_num === 0) {
-        current_page_num = pages;
-    }
-
-    //console.log('update_list pages: ' + pages);
-
-    $('#accounts-table tr td').remove();
-
-    var i;
-    for(i=0; i<updated_accounts_list.length; i++) {
-
-        var account = updated_accounts_list[i];
-        //console.log('account['+account.id+'] login: ' + account.login);
-
-        $group_edit_url_admin = myScript.site_url + '/wp-admin/admin.php?page=add_user&edit='+account.id;
-        $group_edit_url_user_room = myScript.site_url + '/user-room/accounts_management/add-user?edit='+account.id;
-
-        $accounts_table_html += '<tr>';
-
-        if(account.hasOwnProperty('name') && account.hasOwnProperty('surname') && account.hasOwnProperty('patronymic')) {
-            $accounts_table_html += '<td style="text-align:left; padding-left:10px;">'+account.surname+' '+account.name+' '+account.patronymic+'</td>';
-        }
-
-        if(account.hasOwnProperty('login')) {
-            $accounts_table_html += '<td>'+account.login+'</td>';
-        }
-
-        if(account.hasOwnProperty('email')) {
-            $accounts_table_html += '<td>'+account.email+'</td>';
-        }
-
-        if(account.hasOwnProperty('group')) {
-            $accounts_table_html += '<td>'+account.group+'</td>';
-        }
-
-
-        $accounts_table_html +=
-            '                        <?php if(ACCESS_LEVEL == 3): ?>' +
-            '                        <td>' +
-            '                            <div style="padding-top:6px;">' +
-            '                                <div style="display: inline-block;">' +
-            '                                    <?php if(is_admin()): ?>' +
-            '                                        <div class="edit-button" onclick="location.href=\''+$group_edit_url_admin+'\'"></div>' +
-            '                                    <?php else: ?>' +
-            '                                        <div class="edit-button" onclick="location.href=\''+$group_edit_url_user_room+'\'"></div>' +
-            '                                    <?php endif; ?>' +
-            '                                </div>' +
-            '                                <div style="display: inline-block; padding-left:5px;">' +
-            '                                    <div class="delete-button" onclick="delete_user('+account.id+', \''+account.login+'\')"></div>' +
-            '                                </div>' +
-            '                            </div>' +
-            '                        </td>' +
-            '                        <?php endif; ?>' +
-            '                    </tr>';
-
-    }
-
-    document.getElementById("accounts-table").insertAdjacentHTML('beforeend', $accounts_table_html);
-    document.getElementById("page_number_select").selectedIndex = current_page_num-1;
-
-    update_pages_row();
-}
 
 // --------------- Ajax запрос на смену страницы --------------------
 function changePageAjax(action, form_data) {
@@ -119,8 +11,10 @@ function changePageAjax(action, form_data) {
         url: action,
         data: form_data
     }).done(function (response) {
-        var json_response =  jQuery.parseJSON(response);
-        update_list(json_response);
+
+        var access_level = document.getElementById("access_level").value;
+        update_list(response, access_level);
+
     }).fail(function (data) {
         console.log('change page error!');
         if (data.responseText !== '') {
@@ -128,7 +22,6 @@ function changePageAjax(action, form_data) {
         }
     });
 }
-
 
 // ----------------- Обновляем блок с выбором страницы -----------------
 function update_pages_row() {
@@ -212,12 +105,25 @@ function selectItemsOnPageChange() {
     change_page(parseInt(document.getElementById("page_number_select").value));
 }
 
-jQuery(document).ready(function($) {
-    initItemsOnPageSelect();
-
-    change_page(current_page_num);
-});
 </script>
+
+<!--------------- Search Input --------------->
+<div style="display:table; width:100%; height:30px;">
+    <div style="display: inline-block; height:100%; margin-right:10px;"><div style="display: inline-block; vertical-align: middle;">Поиск:</div></div>
+
+    <div style="display: table-cell; width:100%; padding-right:10px;">
+        <input type="text" id="searchInput" style="height:100%; width:100%; padding-left:5px;" placeholder="ФИО пользователя">
+    </div>
+
+    <div style="display: inline-block; position:absolute; right:25px; margin-top:3px;">
+        <div class="icon_typing" id="search_status_icon"></div>
+    </div>
+</div>
+
+<div id="search_error_msg" style="color:red; margin-top:10px;"></div>
+<!----------------------------------------------->
+
+<input type="hidden" id="access_level" value="<?=ACCESS_LEVEL?>">
 
 
 <div class="accounts_container">

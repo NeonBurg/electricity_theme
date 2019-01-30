@@ -243,14 +243,20 @@ class DataController
 
 
     // ----------- Получим список с данными о клиентах ------------
-    public function selectCustomersList($page_number=-1, $items_on_page=-1) {
+    public function selectCustomersList($page_number=-1, $items_on_page=-1, $search_filter=null) {
 
         $customers_list = array();
         $offset = 0;
 
         if($page_number!=-1) {
             $offset = $items_on_page * ($page_number - 1);
-            $select_query = $this->wpdb->prepare("SELECT Customers.*, user_room_accounts.login FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id LIMIT %d, %d", $offset, $items_on_page);
+            if($search_filter!==null) {
+                $search_filter = "%".$search_filter."%";
+                $select_query = $this->wpdb->prepare("SELECT Customers.*, user_room_accounts.login FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id WHERE name LIKE '%s' OR surname LIKE '%s' OR patronymic LIKE '%s' LIMIT %d, %d", $search_filter, $search_filter, $search_filter, $offset, $items_on_page);
+            }
+            else {
+                $select_query = $this->wpdb->prepare("SELECT Customers.*, user_room_accounts.login FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id LIMIT %d, %d", $offset, $items_on_page);
+            }
         }
         else {
             $select_query = "SELECT Customers.*, user_room_accounts.login FROM Customers INNER JOIN user_room_accounts ON Customers.account_id = user_room_accounts.id";
@@ -600,11 +606,21 @@ class DataController
         return $currentValue;
     }
 
-    public function countPages($items_on_page) {
+    public function countPages($items_on_page, $search_filter=null) {
 
         $pages = 0;
 
-        $count_items = $this->get_varSQL("SELECT COUNT(*) as count FROM user_room_accounts");
+        $query = "";
+
+        if($search_filter !== null) {
+            $search_filter = "%".$search_filter."%";
+            $query = $this->wpdb->prepare("SELECT COUNT(*) as count FROM Customers WHERE name LIKE '%s' OR surname LIKE '%s' OR patronymic LIKE '%s'", $search_filter, $search_filter, $search_filter);
+        }
+        else {
+            $query = "SELECT COUNT(*) as count FROM user_room_accounts";
+        }
+
+        $count_items = $this->get_varSQL($query);
         if(!empty($count_items)) {
             $pages = ceil($count_items/$items_on_page);
         }
