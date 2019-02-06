@@ -19,7 +19,7 @@ require_once(ASKUE_PLUGIN_DIR . "models/DataController.php");
 
             $dataController = new DataController($wpdb);
 
-            $count_pages = $dataController->countPages($items_on_page, $search_filter);
+            $count_pages = $dataController->countAccountsPages($items_on_page, $search_filter);
             if($page_num > $count_pages || $page_num == 0) {
                 $page_num = $count_pages;
             }

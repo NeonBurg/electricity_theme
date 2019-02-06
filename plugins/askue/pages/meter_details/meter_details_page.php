@@ -2,6 +2,16 @@
     <h1>Неверный адрес страницы</h1>
 <?php else:?>
 
+    <script>
+        /*var is_up_sort = false;
+
+        function sort_clicked() {
+
+
+
+        }*/
+    </script>
+
     <?php
 
     wp_enqueue_script('delete_ajax');
@@ -9,6 +19,11 @@
     wp_enqueue_script('flot_categories');
     wp_enqueue_script('flot_stack');
     wp_enqueue_script('meter_chart');
+
+    wp_enqueue_script('change_page');
+    wp_enqueue_script('meter_values_page_ajax');
+    
+
     require_once(ASKUE_PLUGIN_DIR . "models/DataController.php");
 
     global $wpdb;
@@ -71,6 +86,9 @@
 
 <h1>Счетчик '<?=$meter->getName();?>'</h1>
 
+    <input type="hidden" id="meter_id" value="<?=$meter_id?>">
+    <input type="hidden" id="access_level" value="<?=ACCESS_LEVEL?>">
+
     <div class="chart-tools-container">
         <div class="chart-tool-title">Интервал: </div>
         <select id="select_add" name="select_add" class="askue-select-add">
@@ -102,6 +120,8 @@
 
     <?php include(ASKUE_PLUGIN_DIR."pages/statistics_block.php"); ?>
 
+<div id="search_error_msg" style="color:red; margin-top:10px;"></div>
+
 <div class="meters_table_container">
 
     <!---------- Meter Values Table ------------>
@@ -113,16 +133,21 @@
             <div class="user_room_block_border">
                 <?php endif;?>
 
-                <table class="energy-object-table" cellpadding="0" cellspacing="0">
+                <table class="energy-object-table" id="meter-values-table" cellpadding="0" cellspacing="0">
                     <tr>
                         <th width="33%" style="text-align:left; padding-left:10px;">Значение</th>
-                        <th>Дата</th>
+                        <th>
+                            <div class="sort_container" onclick="sort_clicked()">
+                                <div class="sort_icon_container"><div class="sort_down_icon" id="sort_icon"></div></div>
+                                <div class="meter_date_title">Дата</div>
+                            </div>
+                        </th>
                         <?php if(ACCESS_LEVEL == 3): ?>
                             <th width="6%"></th>
                         <?php endif; ?>
                     </tr>
 
-                    <?php foreach ($meterValuesList as $meterValue):?>
+                    <!--<?php foreach ($meterValuesList as $meterValue):?>
 
                         <?php
                             $value_edit_url_admin = site_url('/wp-admin/admin.php?page=add_meter_value&meter='.$meter->getId().'&edit='.$meterValue->getId());
@@ -156,12 +181,26 @@
                         if(count($meterValuesList) == 0) {
                             echo '<tr><td style="text-align:left; padding: 10px;">Пустой список показаний</td></tr>';
                         }
-                    ?>
+                    ?>-->
                 </table>
 
                 <?php if(!is_admin()):?>
             </div>
         <?php endif; ?>
+        </div>
+    </div>
+
+    <!----------------- Select pages ------------------->
+    <div class="page_coinainer">
+        <div class="page_select_block">
+            <div id="pages_row"></div>
+            <select id="page_number_select" onchange="selectPageChange()"></select>
+        </div>
+        <div class="items_on_page_block">
+            Записей на странице:
+            <div style="display:inline-block;">
+                <select id="items_on_page_select" onchange="selectItemsOnPageChange()"></select>
+            </div>
         </div>
     </div>
 

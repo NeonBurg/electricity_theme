@@ -56,7 +56,9 @@ class askue
         wp_register_script('add_user_ajax', plugins_url('assets/js/add_user_ajax.js', __FILE__), array(), null, true);
         wp_register_script('delete_ajax', plugins_url('assets/js/delete_ajax.js', __FILE__), array(), null, true);
 
+        wp_register_script('change_page', plugins_url('assets/js/change_page.js', __FILE__), array(), null, true);
         wp_register_script('accounts_page_ajax', plugins_url('assets/js/accounts_page_ajax.js', __FILE__), array(), null, true);
+        wp_register_script('meter_values_page_ajax', plugins_url('assets/js/meter_values_page_ajax.js', __FILE__), array(), null, true);
 
         wp_register_script('jquery_flot', plugins_url('assets/js/charts/jquery.flot.min.js', __FILE__), array(), null, true);
         wp_register_script('flot_stack', plugins_url('assets/js/charts/jquery.flot.stack.js', __FILE__), array(), null, true);

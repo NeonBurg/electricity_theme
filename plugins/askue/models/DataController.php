@@ -374,10 +374,23 @@ class DataController
     }
 
     // -------------- Получим все показания для счетчика -----------------
-    public function selectMeterValuesList($meter_id) {
+    public function selectMeterValuesList($meter_id, $page_number=-1, $items_on_page=-1, $is_up_sort=false) {
         $meter_values_list = array();
 
-        $results = $this->get_resultsSQL($this->wpdb->prepare("SELECT * FROM meter_%d", $meter_id));
+        $query = "";
+
+        $sort_order = "ASC";
+        if($is_up_sort == 'true') $sort_order = "DESC";
+
+        if($page_number!=-1) {
+            $offset = $items_on_page * ($page_number - 1);
+            $query = $this->wpdb->prepare("SELECT * FROM meter_%d ORDER BY date ".$sort_order." LIMIT %d, %d", $meter_id, $offset, $items_on_page);
+        }
+        else {
+            $query = $this->wpdb->prepare("SELECT * FROM meter_%d ORDER BY date ".$sort_order, $meter_id);
+        }
+
+        $results = $this->get_resultsSQL($query);
         if($results != null) {
             foreach($results as $result_row) {
                 $meterValue = new MeterValue($result_row);
@@ -606,7 +619,7 @@ class DataController
         return $currentValue;
     }
 
-    public function countPages($items_on_page, $search_filter=null) {
+    public function countAccountsPages($items_on_page, $search_filter=null) {
 
         $pages = 0;
 
@@ -626,6 +639,39 @@ class DataController
         }
 
         return $pages;
+    }
+
+    public function countMeterValuesPages($meter_id, $items_on_page) {
+
+        $meterValues = 0;
+
+        $query = "SELECT COUNT(*) as count FROM meter_".$meter_id;
+
+        $count_items = $this->get_varSQL($query);
+        if(!empty($count_items)) {
+            $meterValues = ceil($count_items/$items_on_page);
+        }
+
+        return $meterValues;
+
+    }
+
+    public function countEnergyObjectChildElements($energyObject_id) {
+
+        $count_elements = 0;
+        $child_meters = $this->get_varSQL($this->wpdb->prepare("SELECT COUNT(*) as meters_count FROM Meters WHERE energyObject_id = %d", $energyObject_id));
+        $child_objects = $this->get_varSQL($this->wpdb->prepare("SELECT COUNT(*) as objects_count FROM EnergyObjects WHERE energyObject_id = %d", $energyObject_id));
+
+        if($child_meters) {
+            $count_elements += $child_meters;
+        }
+
+        if($child_objects) {
+            $count_elements += $child_objects;
+        }
+
+        return $count_elements;
+
     }
 
     // ----------------================ Data modifiers ===============------------------

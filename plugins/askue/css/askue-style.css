@@ -31,14 +31,16 @@ h1 a:hover {
     background-color: #b5b5b5;
 }
 .energy-object-top-table td {
-    height: 38px;
+    height: 40px;
+    line-height: 40px;
 }
 
 .energy-object-title {
-    padding:10px;
+    padding:0 10px;
     font-size:14pt;
     font-weight:bold;
     display:inline-block;
+    padding-top:2px;
 }
 
 .askue-admin-content {
@@ -384,6 +386,8 @@ h1 a:hover {
 }
 
 .nested_name_text {
+    display: inline-block;
+    margin-right:10px;
     line-height:40px;
 }
 
@@ -584,4 +588,75 @@ h1 a:hover {
 
 #pages_row a:hover {
     text-decoration: underline;
+}
+
+.page_coinainer {
+    display:inline-block;
+    margin-top:10px;
+}
+
+.page_select_block {
+    display:inline-block;
+}
+
+.items_on_page_block {
+    display:inline-block;
+    margin-left: 30px;
+    vertical-align: top;
+}
+
+.expand_icon_plus {
+    display: inline-block;
+    background: url('../assets/images/plus_icon.gif') no-repeat;
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+.expand_icon_minus {
+    display: inline-block;
+    background: url('../assets/images/minus_icon.gif') no-repeat;
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.expand_icon_container {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right:10px;
+    position:relative;
+    bottom:3px;
+}
+
+.sort_icon_container {
+    position:relative;
+    display:inline-block;
+    vertical-align: middle;
+    bottom:8px;
+}
+
+.sort_down_icon {
+    position:absolute;
+    width: 15px;
+    height: 15px;
+    background: url('../assets/images/sort_down.png') no-repeat;
+    right: 10px;
+}
+
+.sort_up_icon {
+    position:absolute;
+    width: 15px;
+    height: 15px;
+    background: url('../assets/images/sort_up.png') no-repeat;
+    right: 10px;
+}
+
+.meter_date_title {
+    display:inline-block;
+}
+
+.sort_container {
+    cursor: pointer;
 }
