@@ -9,7 +9,7 @@
 
 				$user_id = trim($_COOKIE['id']);
 					
-				$result = $conn->get_row("SELECT id, session_hash, ip FROM user_room_accounts WHERE id = '".$user_id."'");
+				$result = $conn->get_row($conn->prepare("SELECT id, session_hash, ip FROM user_room_accounts WHERE id = %d", $user_id));
 
 				if($result) {
 					$s_user_id = $result->id;

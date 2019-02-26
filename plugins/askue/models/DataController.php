@@ -206,7 +206,7 @@ class DataController
             $select_query = "SELECT * FROM Meters";
         }
         else {
-            $select_query = "SELECT * FROM Meters WHERE energyObject_id = " . $energyObject_id;
+            $select_query = $this->wpdb->prepare("SELECT * FROM Meters WHERE energyObject_id = %d", $energyObject_id);
         }
 
         $results = $this->get_resultsSQL($select_query);
@@ -645,7 +645,7 @@ class DataController
 
         $meterValues = 0;
 
-        $query = "SELECT COUNT(*) as count FROM meter_".$meter_id;
+        $query = $this->wpdb->prepare("SELECT COUNT(*) as count FROM meter_%d",$meter_id);
 
         $count_items = $this->get_varSQL($query);
         if(!empty($count_items)) {

@@ -28,7 +28,7 @@ if($wpdb) {
     $sql = $wpdb->prepare("INSERT INTO user_room_accounts(login, password_hash, session_hash) VALUES(%s, %s, %s)", $login, $password_hash, null);
     $wpdb->query($sql);
 
-    $account_id = $wpdb->get_var("SELECT id FROM user_room_accounts WHERE login = '".$login."'");
+    $account_id = $wpdb->get_var($wpdb->prepare("SELECT id FROM user_room_accounts WHERE login = %s", $login));
 
     $group_id = $wpdb->get_var("SELECT id FROM UserGroups WHERE name = 'Клиенты'"); // TO-DO выбор группы по уровню доступа
 

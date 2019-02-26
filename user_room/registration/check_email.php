@@ -22,7 +22,7 @@ require_once( $path . '/wp-load.php');
         /* --------------------========= Проверка email адреса ==========-------------------- */
         if(!empty($email)) {
 
-            $s_email_result= $wpdb->get_results("SELECT email FROM user_room_accounts WHERE email = '".$email."'");
+            $s_email_result= $wpdb->get_results($this->wpdb->prepare("SELECT email FROM user_room_accounts WHERE email = %s", $email));
 
             if($s_email_result) {
                 http_response_code(400);

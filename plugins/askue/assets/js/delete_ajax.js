@@ -12,7 +12,7 @@ function delete_meter(meter_id, meter_name) {
 }
 
 function delete_energy_object(energy_object_id, energy_object_name) {
-    if (confirm("Удалить энергетический объект: '" + energy_object_name + "' ?")) {
+    if (confirm("Удалить энергетический объект: '" + energy_object_name + " ['"+energy_object_id+"] ?")) {
         console.log('delete meter: id = ' + energy_object_id);
         $form_data = {'energy_object_id': energy_object_id};
         //$form_action = '<?=plugins_url("/remove_energy_object.php", __FILE__);?>';
@@ -71,6 +71,7 @@ function makeDeleteAjax(action, form_data) {
         url: action,
         data: form_data
     }).done(function (response) {
+        //console.log(response);
         location.reload(); // Обновляем страницу после удаления
     }).fail(function (data) {
         console.log('delete error!');

@@ -16,7 +16,7 @@
     if($wpdb) {
         // Выбираем пользователя из таблицы БД по логину
 
-        $result = $wpdb->get_row("SELECT id, login, password_hash FROM user_room_accounts WHERE login = '".$login."'");
+        $result = $wpdb->get_row($wpdb->prepare("SELECT id, login, password_hash FROM user_room_accounts WHERE login = %s", $login));
 
         if($result) {
             $s_user_id = $result->id;
@@ -67,7 +67,7 @@
                     header("location: /user_room_page/auth/?login=".$login."&err=".$err[0]);
                 }*/
 
-                $result = $wpdb->get_row("SELECT session_hash FROM user_room_accounts WHERE id = ".$s_user_id);
+                $result = $wpdb->get_row($wpdb->prepare("SELECT session_hash FROM user_room_accounts WHERE id = %d", $s_user_id));
                 if($result->session_hash) {
                     header("location: ".site_url('/user-room/'));
                 }

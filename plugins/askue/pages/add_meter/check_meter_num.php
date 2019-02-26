@@ -36,36 +36,16 @@ if($wpdb) {
         exit;
     }
 
+        if(!isset($_POST["edit_meter_num"]) || strcmp($_POST["edit_meter_num"], $meter_num) !== 0) {
 
-    if(isset($_POST["energy_object_input"])) {
-        $energy_object_name = $_POST["energy_object_input"];
+            $meters_results = $wpdb->get_var($wpdb->prepare("SELECT num FROM Meters WHERE num = %d", $meter_num));
 
-        if(!isset($_POST["edit_meter_num"]) || !isset($_POST["edit_meter_energy_object_name"]) || strcmp($_POST["edit_meter_energy_object_name"], $energy_object_name) !== 0 || strcmp($_POST["edit_meter_num"], $meter_num) !== 0) {
-
-            $energy_object_id = $wpdb->get_var($wpdb->prepare("SELECT id FROM EnergyObjects WHERE name = %s", $energy_object_name));
-            if (!empty($energy_object_id)) {
-
-                $meters_results = $wpdb->get_results($wpdb->prepare("SELECT num FROM Meters WHERE energyObject_id = %d", $energy_object_id));
-
-                $meter_num_unique = true;
-
-                if ($meters_results) {
-                    foreach ($meters_results as $meter) {
-                        if (strcmp($meter->num, $meter_num) === 0) {
-                            $meter_num_unique = false;
-                        }
-                    }
-                }
-
-                if (!$meter_num_unique) {
-                    http_response_code(400);
-                    echo "Счетчик с таким номером уже существует";
-                    exit;
-                }
-
+            if (!empty($meters_results)) {
+                http_response_code(400);
+                echo "Счетчик с таким номером уже существует";
+                exit;
             }
         }
-    }
 
 }
 else {

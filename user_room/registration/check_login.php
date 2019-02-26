@@ -51,7 +51,7 @@ require_once( $path . '/wp-load.php');
         // Проверяем уникальность логина в БД
 
         if(!isset($_POST["edit_user_login"]) || strcmp($_POST["edit_user_login"], $login) !== 0) {
-            $result = $wpdb->get_results("SELECT login FROM user_room_accounts WHERE login = '" . $login . "'");
+            $result = $wpdb->get_results($this->wpdb->prepare("SELECT login FROM user_room_accounts WHERE login = %s", $login));
 
             if ($result) {
                 http_response_code(400);
