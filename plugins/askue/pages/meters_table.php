@@ -135,9 +135,8 @@ function showNestedObjects($nestedLevel, $energyObjectId, $dataController, $user
 
             $GLOBALS['objects_parents'][$nestedEnergyObject->getId()] = $energyObjectId;
 
-            $count_child_elements = $dataController->countEnergyObjectChildElements($nestedEnergyObject->getId());
 
-            printEnergyObjectRow($nestedEnergyObject, $nestedLevel, ($j==count($nestedEnergyObjects)-1 && $count_child_elements == 0), $count_child_elements, $dataController->selectEnergyObjectValue($nestedEnergyObject));
+            printEnergyObjectRow($nestedEnergyObject, $nestedLevel, ($j==count($nestedEnergyObjects)-1) && count($nestedParentMeters) == 0, $dataController->countEnergyObjectChildElements($nestedEnergyObject->getId()), $dataController->selectEnergyObjectValue($nestedEnergyObject));
             showNestedObjects($nestedLevel+1, $nestedEnergyObject->getId(), $dataController, $user_id, $root_object_id);
 
             $j++;
@@ -205,7 +204,11 @@ function printEnergyObjectRow($energyObject, $nestedLevel, $is_last_row, $child_
     echo '</div>';
     echo '</div><ul id="energy_object_ul_'.$energyObject->getId().'">';
 
-    if($is_last_row || $child_elements_count <= 0) {
+    if($is_last_row && $child_elements_count == 0) {
+        echo '</ul></li>';
+        $showed_objects--;
+    }
+    else if($child_elements_count == 0) {
         echo '</ul></li>';
         $showed_objects--;
     }
