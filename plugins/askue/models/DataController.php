@@ -656,6 +656,15 @@ class DataController
 
     }
 
+    public function countEnergyObjectMeters($energyObject_id) {
+        $count_elements = 0;
+        $child_meters = $this->get_varSQL($this->wpdb->prepare("SELECT COUNT(*) as meters_count FROM Meters WHERE energyObject_id = %d", $energyObject_id));
+        if($child_meters) {
+            $count_elements += $child_meters;
+        }
+        return $count_elements;
+    }
+
     public function countEnergyObjectChildElements($energyObject_id) {
 
         $count_elements = 0;
@@ -669,6 +678,17 @@ class DataController
         if($child_objects) {
             $count_elements += $child_objects;
         }
+
+        /*$child_objects_ids = $this->get_resultsSQL($this->wpdb->prepare("SELECT id FROM EnergyObjects WHERE energyObject_id = %d", $energyObject_id));
+        if($child_objects_ids) {
+            foreach ($child_objects_ids as $child_object_id) {
+                $child_object_meters = $this->get_varSQL($this->wpdb->prepare("SELECT COUNT(*) as meters_count FROM Meters WHERE energyObject_id = %d", $child_object_id->id));
+                if($child_object_meters) {
+                    $count_elements += $child_object_meters;
+                }
+                $count_elements++;
+            }
+        }*/
 
         return $count_elements;
 
