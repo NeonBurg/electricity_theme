@@ -129,6 +129,105 @@ h1 a:hover {
 
 /*--------------------------------------------*/
 
+/* --------------------- Energy Objects Expand List styles --------------- */
+
+ul.tree_objects_list {
+    width:100%;
+}
+
+ul.tree_objects_list, ul.tree_objects_list ul {
+    list-style-type: none;
+    background:url(../assets/images/vline.png) repeat-y;
+    margin: 0;
+    padding: 0;
+}
+
+ul.tree_objects_list ul {
+    margin-left: 10px;
+}
+
+ul.tree_objects_list li {
+    margin: 0;
+    padding-left: 12px;
+    line-height: 30px;
+    background:url(../assets/images/node.png) no-repeat;
+}
+
+ul.tree_objects_list li.last {
+    background: #fff url(../assets/images/lastnode.png) no-repeat;
+}
+
+.meter_row {
+    display: table;
+    width:100%;
+}
+
+.meter_row:hover {
+    background-color: #d9d9d9;
+    cursor: pointer;
+}
+
+.energy_object_row {
+    display: table;
+    width:100%;
+}
+
+.energy_object_row:hover {
+    background-color: #d9d9d9;
+    cursor: pointer;
+}
+
+.energy_object_column_name {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.energy_object_column_expand {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.energy_object_column_value {
+    display: table-cell;
+    float: right;
+    padding-right:20px;
+}
+
+.meter_column_name {
+    display: table-cell;
+    vertical-align: middle;
+    border:0px solid gray;
+}
+
+.meter_column_value {
+    display: table-cell;
+    float: right;
+    padding-right:20px;
+}
+
+.meter_num_column {
+    vertical-align: middle;
+    text-align: center;
+    width:100px;
+    position: absolute;
+    right:20px;
+}
+
+.objects_list_cointainer {
+    padding-left:20px;
+}
+
+.meter_value_container {
+    display:inline-block;
+    padding-right:30px;
+}
+
+.edit_buttons_container {
+    display: inline-block;
+}
+
+/* -------------------------------------------------------------------*/
+
 /*------------- askue add form styles ------------ */
 .input-form-container {
     background-color: #ffffff;
