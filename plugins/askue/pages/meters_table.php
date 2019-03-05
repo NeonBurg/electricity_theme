@@ -300,6 +300,7 @@ function printMeterRow($meter, $nestedLevel, $is_last_row, $last_value) {
 
 <?php foreach ($energyObjectsList as $energyObject): ?>
     <?php
+    $showed_objects = 0;
     $customer = $dataController->selectCustomer($energyObject->getCustomerId());
 
     $energy_object_edit_url_admin = site_url('/wp-admin/admin.php?page=add_energy_object&edit='.$energyObject->getId());

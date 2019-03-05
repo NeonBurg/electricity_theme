@@ -23,7 +23,9 @@ class DataController
         HOURS_2 = 3,
         DAY = 4,
         WEEK = 5,
-        MONTH = 6;
+        MONTH = 6,
+        MINUTES_5 = 7,
+        MINUTES_15 = 8;
 
     public function __construct($wpdb) {
         $this->wpdb = $wpdb;
@@ -423,38 +425,59 @@ class DataController
 
         $date_format_style = '';
         $statement_sign = '';
+        $modify_date_expr = "+1 day";
 
         switch ($interval) {
+            case self::MINUTES_5:
+                $modify_date_expr = "+5 minutes";
+                //$next_date->modify("+5 minutes");
+                $date_format_style = 'd.m H:i';
+                $statement_sign = '<=';
+                break;
+            case self::MINUTES_15:
+                $modify_date_expr = "+15 minutes";
+                //$next_date->modify("+15 minutes");
+                $date_format_style = 'd.m H:i';
+                $statement_sign = '<=';
+                break;
             case self::MINUTES_30:
-                $next_date->modify("+30 minutes");
+                $modify_date_expr = "+30 minutes";
+                //$next_date->modify("+30 minutes");
                 $date_format_style = 'd.m H:i';
                 $statement_sign = '<=';
                 break;
             case self::HOURS_1:
-                $next_date->modify("+60 minutes");
+                $modify_date_expr = "+60 minutes";
+                //$next_date->modify("+60 minutes");
                 $date_format_style = 'd.m H:i';
                 $statement_sign = '<=';
                 break;
             case self::DAY:
-                $next_date->modify("+1 day");
+                $modify_date_expr = "+1 day";
+                //$next_date->modify("+1 day");
                 $date_format_style = 'd.m';
                 $statement_sign = '<';
                 break;
             case self::WEEK:
-                $next_date->modify("+7 day");
+                $modify_date_expr = "+7 day";
+                //$next_date->modify("+7 day");
                 $date_format_style = 'd.m';
                 $statement_sign = '<';
                 break;
             case self::MONTH:
-                $next_date->modify("+1 month");
+                $modify_date_expr = "+1 month";
+                //$next_date->modify("+1 month");
                 $date_format_style = 'd.m.y';
                 $statement_sign = '<';
                 break;
             default:
-                $next_date->modify("+1 day");
+                $modify_date_expr = "+1 day";
+                //$next_date->modify("+1 day");
                 $date_format_style = 'd.m';
                 break;
         }
+
+        $next_date->modify($modify_date_expr);
 
         //while($iterator_date < $to_date) {
         while($iterator_date < $to_date) {
@@ -475,7 +498,15 @@ class DataController
                 $meter_values_list[] = [date_format($iterator_date, $date_format_style), 0];
             }
 
-            switch($interval) {
+            /*switch($interval) {
+                case self::MINUTES_5:
+                    $iterator_date->modify("+5 minutes");
+                    $next_date->modify("+5 minutes");
+                    break;
+                case self::MINUTES_15:
+                    $iterator_date->modify("+15 minutes");
+                    $next_date->modify("+15 minutes");
+                    break;
                 case self::MINUTES_30:
                     $iterator_date->modify("+30 minutes");
                     $next_date->modify("+30 minutes");
@@ -500,7 +531,10 @@ class DataController
                     $iterator_date->modify("+1 day");
                     $next_date->modify("+1 day");
                     break;
-            }
+            }*/
+
+            $iterator_date->modify($modify_date_expr);
+            $next_date->modify($modify_date_expr);
 
             //echo "iterator_date = " . date_format($iterator_date, 'd.m.Y H:i');
         }

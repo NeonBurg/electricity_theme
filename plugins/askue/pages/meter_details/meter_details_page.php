@@ -92,6 +92,8 @@
     <div class="chart-tools-container">
         <div class="chart-tool-title">Интервал: </div>
         <select id="select_add" name="select_add" class="askue-select-add">
+            <option value="MINUTES_5">5 минут</option>
+            <option value="MINUTES_15">15 минут</option>
             <option value="MINUTES_30">30 минут</option>
             <option value="HOURS_1">Час</option>
             <option value="DAY">День</option>
@@ -147,41 +149,7 @@
                         <?php endif; ?>
                     </tr>
 
-                    <!--<?php foreach ($meterValuesList as $meterValue):?>
-
-                        <?php
-                            $value_edit_url_admin = site_url('/wp-admin/admin.php?page=add_meter_value&meter='.$meter->getId().'&edit='.$meterValue->getId());
-                            $value_edit_url_user_room = site_url('/user-room/meters-management/meter-details/add-meter-value?meter='.$meter->getId().'&edit='.$meterValue->getId());
-                        ?>
-
-                        <tr>
-                            <td style="text-align:left; padding-left:10px;"><?php echo $meterValue->getValue();?></td>
-                            <td><?=$meterValue->getFormattedDate();?></td>
-
-                            <?php if(ACCESS_LEVEL == 3): ?>
-                                <td>
-                                    <div style="padding-top:6px;">
-                                        <div style="display: inline-block;">
-                                            <?php if(is_admin()): ?>
-                                                <div class="edit-button" onclick="location.href='<?=$value_edit_url_admin?>'"></div>
-                                            <?php else: ?>
-                                                <div class="edit-button" onclick="location.href='<?=$value_edit_url_user_room?>'"></div>
-                                            <?php endif; ?>
-                                        </div>
-                                        <div style="display: inline-block; padding-left:5px;">
-                                            <div class="delete-button" onclick="delete_meter_value(<?=$meter->getId()?>, <?=$meterValue->getId()?>, <?=$meterValue->getValue()?>, '<?=$meterValue->getFormattedDate()?>');"></div>
-                                        </div>
-                                    </div>
-                                </td>
-                            <?php endif; ?>
-                        </tr>
-                    <?php endforeach; ?>
-
-                    <?php
-                        if(count($meterValuesList) == 0) {
-                            echo '<tr><td style="text-align:left; padding: 10px;">Пустой список показаний</td></tr>';
-                        }
-                    ?>-->
+                    <!-- Meter Values list shows in JavaScript meter_values_page_ajax.js -->
                 </table>
 
                 <?php if(!is_admin()):?>

@@ -58,6 +58,7 @@
                         d2.push([json_meter_values[0][0], json_meter_values[0][1]]);
                         for (var i = 0; i < (arr_size - 2); i++) {
                             //console.log(json_meter_values[i][0] + " - " + json_meter_values[i][1]);
+                            //console.log(json_meter_values[i+1][0] + " - " + json_meter_values[i+1][1]);
                             var d1_val = json_meter_values[i][1];
                             var d1_next_val = json_meter_values[i + 1][1];
 
@@ -67,7 +68,7 @@
                             else {
                                 difference = d1_next_val - old_value;
                             }
-                            //console.log('difference = ' + difference);
+                            console.log('difference = ' + difference);
                             if(difference < 0) {
                                 d2.push([json_meter_values[i + 1][0], json_meter_values[i + 1][1]]);
                             }
@@ -76,20 +77,20 @@
                             }
                         }
 
-                        for (var i = 0; i < arr_size-1; i++) {
+                        /*for (var i = 0; i < arr_size-1; i++) {
                             d3.push([json_meter_values[i][0], (json_meter_values[i][1] - d2[i][1])]);
                             //console.log('d3 = ' + d3[i][1]);
-                        }
+                        }*/
 
                         //d3.push()
 
-                        drawBarsChart(d3, d2, json_meter_values[arr_size-1][0]);
+                        drawBarsChart(d2, json_meter_values[arr_size-1][0]);
                 }
             }
 
             // ------------- Рисуем график гистограмму -------------------
-            function drawBarsChart(arr1, arr2, last_val) {
-                var p = $.plot("#meter-chart", [{label: "Прошлое потребление Кв/Ч", data: arr1}, {label: "Актуальное потребление Кв/Ч", data: arr2}], {
+            function drawBarsChart(arr1, last_val) {
+                var p = $.plot("#meter-chart", [{label: "Актуальное потребление Кв/Ч", data: arr1}], {
                     series: {
                         stack: 0,
                         bars: {
@@ -255,6 +256,12 @@
                 //console.log('last meter date = ' + meter_last_date);
 
                 switch (select_val) {
+                    case 'MINUTES_5':
+                        interval = 7;
+                        break;
+                    case 'MINUTES_15':
+                        interval = 8;
+                        break;
                     case 'MINUTES_30':
                         interval = 1;
                         break;

@@ -1,4 +1,3 @@
-
     <div style="height:250px; margin-top: 100px;"></div>
     <div style="width:100%; height:250px; background: #b5b5b5; position:absolute; bottom: 0;">
         &nbsp;
