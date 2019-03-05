@@ -16,13 +16,14 @@ if($wpdb) {
         $is_up_sort = $_POST["is_up_sort"];
 
         $dataController = new DataController($wpdb);
+        $meter = $dataController->selectMeter($meter_id);
 
-        $count_pages = $dataController->countMeterValuesPages($meter_id, $items_on_page);
+        $count_pages = $dataController->countMeterValuesPages($meter->getNum(), $items_on_page);
         if($page_num > $count_pages || $page_num == 0) {
             $page_num = $count_pages;
         }
 
-        $meter_values_list = $dataController->selectMeterValuesList($meter_id, $page_num, $items_on_page, $is_up_sort);
+        $meter_values_list = $dataController->selectMeterValuesList($meter->getNum(), $page_num, $items_on_page, $is_up_sort);
         $json_meter_values_list = array();
 
 

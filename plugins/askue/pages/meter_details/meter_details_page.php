@@ -40,14 +40,11 @@
         $meter_id = $_GET["meter"];
         if (!empty($meter_id)) {
             $meter = $dataController->selectMeter($meter_id);
-            $meterValuesList = $dataController->selectMeterValuesList($meter_id);
-            $meter_last_value = $dataController->selectMeterLastValue($meter_id);
+            $meterValuesList = $dataController->selectMeterValuesList($meter->getNum());
+            $meter_last_value = $dataController->selectMeterLastValue($meter->getNum());
             if($meter_last_value != null) {
                 $meter_last_date = $meter_last_value->getDate();
-            }
-            $meterLastValue = $dataController->selectMeterLastValue($meter_id);
-            if($meterLastValue) {
-                $currentValue = $dataController->selectMeterLastValue($meter_id)->getValue();
+                $currentValue = $meter_last_value->getValue();
             }
         }
     }

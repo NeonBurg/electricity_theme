@@ -273,7 +273,7 @@ function printMeterRow($meter, $nestedLevel, $is_last_row, $last_value) {
                                    <div class="delete-button" onclick="edit_button_clicked = true; delete_meter('.$meter->getId().',\''. $meter->getName().'\');"></div>
                                </div>
                             </div>
-                </div';
+                </div>';
                 }
                 echo '</div>'.
             '</div>';
@@ -297,6 +297,10 @@ function printMeterRow($meter, $nestedLevel, $is_last_row, $last_value) {
 ?>
 
 <?php //echo "access_level = ".ACCESS_LEVEL; ?>
+
+<?php
+    $empty_meters_list = $dataController->selectEmptyMetersList();
+?>
 
 <?php foreach ($energyObjectsList as $energyObject): ?>
     <?php
@@ -382,3 +386,77 @@ function printMeterRow($meter, $nestedLevel, $is_last_row, $last_value) {
     <div class="energy-object-separator">&nbsp;</div>
 
 <?php endforeach; ?>
+
+
+<!------------- TEST show empty meters list -------------------->
+
+<table class="energy-object-top-table" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td>
+            <div class="energy-object-title">Список новых счетчиков</div>
+        </td>
+    </tr>
+</table>
+
+<table class="energy-object-table" cellpadding="0" cellspacing="0">
+    <tr>
+        <th width="33%" style="text-align:left; padding-left:10px;">Название</th>
+        <th>Счетчик №</th>
+        <th width="33%" style="text-align:right; padding-right:10px;">Потребление (Кв/ч)</th>
+        <?php if(ACCESS_LEVEL == 2 || ACCESS_LEVEL == 3): ?>
+            <th width="6%"></th>
+        <?php endif; ?>
+    </tr>
+
+    <?php foreach ($empty_meters_list as $empty_meter): ?>
+
+    <?php
+        if(is_admin()) {
+            $url_meter_detail = site_url('/wp-admin/admin.php?page=meter_details&meter='.$empty_meter->getId());
+        }
+        else {
+            $url_meter_detail = site_url('/user-room/meter-management/meter-details?meter='.$empty_meter->getId());
+        }
+    ?>
+
+    <tr onclick="detailsMeterClicked('<?=$url_meter_detail?>')">
+        <td style="text-align:left; padding-left:10px;">
+            <?php
+            if(empty($empty_meter->getName())) {
+                echo "Пустое имя";
+            }
+            else {
+                echo $empty_meter->getName();
+            }
+            ?>
+        </td>
+        <td><?=$empty_meter->getNum()?></td>
+        <td style="text-align:right; padding-right:10px;"><?=$dataController->selectMeterLastValue($empty_meter->getNum())->getValue()?></td>
+
+        <?php if(ACCESS_LEVEL == 2 || ACCESS_LEVEL == 3): ?>
+            <?php
+            $meter_edit_url_admin = site_url('/wp-admin/admin.php?page=add_meter&edit='.$empty_meter->getId());
+            $meter_edit_url_user_room = site_url('/user-room/meters-management/add-meter?edit='.$empty_meter->getId());
+
+                echo '<td width="6%">
+                               <div style="padding-top:6px;">
+                                    <div style="display:inline-block">';
+                if(is_admin())
+                    echo '<div class="edit-button" onclick="edit_button_clicked = true; location.href=\''.$meter_edit_url_admin.';\'"></div>';
+                else
+                    echo '<div class="edit-button" onclick="edit_button_clicked = true; location.href=\''.$meter_edit_url_user_room.';\'"></div>';
+
+                echo        '</div>';
+
+                echo   '<div style="display: inline-block; padding-left:5px;">
+                                       <div class="delete-button" onclick="edit_button_clicked = true; delete_meter('.$empty_meter->getId().',\''. $empty_meter->getName().'\');"></div>
+                                   </div>
+                                </div>
+                    </td>';
+            ?>
+        <?php endif; ?>
+    </tr>
+
+    <?php endforeach; ?>
+
+</table>

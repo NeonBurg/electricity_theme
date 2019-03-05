@@ -15,7 +15,8 @@ if($meter_id && $value_id) {
     if($wpdb) {
 
         $dataController = new DataController($wpdb);
-        $dataController->deleteMeterValue($meter_id, $value_id);
+        $meter = $dataController->selectMeter($meter_id);
+        $dataController->deleteMeterValue($meter->getNum(), $value_id);
 
         http_response_code(200);
         echo "Успешное удаление группы: meter_id = ".$group_id;

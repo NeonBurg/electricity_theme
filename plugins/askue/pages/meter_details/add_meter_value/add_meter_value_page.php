@@ -14,7 +14,7 @@
 
             if(isset($_GET["edit"])) {
                 $edit_value_id = $_GET["edit"];
-                $edit_meter_value = $dataController->selectMeterValue($meter_id, $edit_value_id);
+                $edit_meter_value = $dataController->selectMeterValue($meter->getNum(), $edit_value_id);
             }
         }
     ?>

@@ -52,13 +52,13 @@ if($wpdb) {
         $sql_insert_meter = $wpdb->prepare("INSERT INTO Meters(name, num, energyObject_id, meterType_id, network_address) VALUES('%s', %d, %d, %d, %d)", $meter_name, $meter_num, $energy_object_id, $meter_type_id, $network_address);
         $wpdb->query($sql_insert_meter);
 
-        $result = $wpdb->get_row("SELECT id FROM Meters ORDER BY id DESC LIMIT 1");
+        $result = $wpdb->get_row("SELECT num FROM Meters ORDER BY id DESC LIMIT 1");
 
         if ($result) {
 
-            $meter_id = $result->id;
+            $meter_num = $result->num;
 
-            $table_name = "meter_" . $meter_id;
+            $table_name = "meter_" . $meter_num;
 
             $wpdb->query("CREATE TABLE  " . $table_name . " (id int(10) NOT NULL AUTO_INCREMENT, KC int(11) NOT NULL, type tinyint(4) NOT NULL, base int(11) NOT NULL, decim varchar(4) NOT NULL, date datetime NOT NULL UNIQUE, PRIMARY KEY (id))");
 

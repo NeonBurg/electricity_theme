@@ -20,7 +20,8 @@ if($meter_id) {
     if($wpdb) {
 
         $dataController = new DataController($wpdb);
-        $dataController->deleteMeter($meter_id);
+        $meter = $dataController->selectMeter($meter_id);
+        $dataController->deleteMeter($meter->getId(), $meter->getNum());
 
         http_response_code(200);
         echo "Успешное удаление счетчика: meter_id = ".$meter_id;

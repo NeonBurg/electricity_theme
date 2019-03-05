@@ -148,7 +148,8 @@ class Database
 		
 		$create_request_table_sql = "CREATE TABLE IF NOT EXISTS TestMetersRequests (id int(10) NOT NULL AUTO_INCREMENT, request TEXT, income_date DATETIME, PRIMARY KEY(id))";
 		$current_date = new DateTime();
-		$insert_request_sql = "INSERT INTO TestMetersRequest(request, income_date) VALUES('".$b."', '".$current_date->format('Y-m-d H:i:s')."')";
+		//$insert_request_sql = "INSERT INTO TestMetersRequest(request, income_date) VALUES('".$b."', '".$current_date->format('Y-m-d H:i:s')."')";
+        $insert_request_sql = "INSERT INTO TestMetersRequests(request) VALUES('".$b."')";
 		$this->mysqli->query($create_request_table_sql);
 		$this->mysqli->query($insert_request_sql);
 		
@@ -242,7 +243,7 @@ class Database
                 $meter_type_row  = $result->fetch_assoc();
                 $meter_type_id = $meter_type_row["id"];
 
-                if (!$row) //вносим серийный номер СЧ в counters
+                if (!$row) //Вносим серийный номер СЧ в counters
                 {
                     $query = "INSERT INTO Meters (num, KC, level, meterType_id) VALUES ('{$data->c}', '{$data->KC}', '{$data->level}', '{$meter_type_id}');";
                     $result = $this->mysqli->query($query);
@@ -281,7 +282,7 @@ class Database
             $query = "CREATE TABLE IF NOT EXISTS meter_{$data->c} (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, KC INT NOT NULL, type TINYINT UNSIGNED NOT NULL, base INT NOT NULL, decim varchar(4) NOT NULL, date DATETIME NOT NULL, UNIQUE (date)) ENGINE = InnoDB CHARACTER SET binary;";
 		$result = $this->mysqli->query($query);
 		if (!$result) die('Invalid CREATE query for this counter: ' . $this->mysqli->error);
-		        $query = "INSERT INTO Meters (num, KC, level) VALUES ('{$data->c}', '{$data->KC}', '{$data->level}');";
+			$query = "INSERT INTO Meters (num, KC, level) VALUES ('{$data->c}', '{$data->KC}', '{$data->level}');";
 			$result = $this->mysqli->query($query);
 		        if (!$result) die('Invalid INSERT into COUNTERS query: ' . $this->mysqli->error);
 		}
@@ -292,13 +293,13 @@ class Database
             $row = $result->fetch_assoc();
             if (!$row) //проверка на отсутствие совпадений датывремени пакета данных с уже имеющимся в таблице
             {
-                $query = "INSERT INTO meter_{$data->c} (KC, type, base, dec, date) VALUES ('{$data->KC}', '{$data->type}', '{$data->base}', '{$data->dec}', '{$data->dt}');";
+                $query = "INSERT INTO meter_{$data->c} (KC, type, base, decim, date) VALUES ('{$data->KC}', '{$data->type}', '{$data->base}', '{$data->dec}', '{$data->dt}');";
                 $result = $this->mysqli->query($query);
                 if (!$result) die('Invalid INSERT INTO ' . $data->c . ' query: ' . $this->mysqli->error); //unique
             }
         }
         else {
-            die('Invalid SELECT dt' . $this->mysqli->error);
+            die('Invalid SELECT date' . $this->mysqli->error);
 		}
 	}
 }
