@@ -1,4 +1,6 @@
-<?php
+﻿<?php
+date_default_timezone_set('Asia/Yekaterinburg');
+
 class Counter
 {
 	public $c;
@@ -284,18 +286,24 @@ class Database
 		        if (!$result) die('Invalid INSERT into COUNTERS query: ' . $this->mysqli->error);
 		}
 		//к данному моменту создана таблица конкретного счетчика и сделана запись в таблицу "counters"...
-		$query = "SELECT dt FROM meter_{$data->c} WHERE date = '{$data->dt}';";
+		$query = "SELECT date FROM meter_{$data->c} WHERE date = '{$data->dt}'";
 		$result = $this->mysqli->query($query);
-		$row  = $result->fetch_assoc();
-		if (!$row) //проверка на отсутствие совпадений датывремени пакета данных с уже имеющимся в таблице
-		{
-			$query = "INSERT INTO meter_{$data->c} (KC, type, base, dec, date) VALUES ('{$data->KC}', '{$data->type}', '{$data->base}', '{$data->dec}', '{$data->dt}');";
-			$result = $this->mysqli->query($query);
-			if (!$result) die('Invalid INSERT INTO '.$data->c.' query: ' . $this->mysqli->error); //unique
+		if($result) {
+            $row = $result->fetch_assoc();
+            if (!$row) //проверка на отсутствие совпадений датывремени пакета данных с уже имеющимся в таблице
+            {
+                $query = "INSERT INTO meter_{$data->c} (KC, type, base, dec, date) VALUES ('{$data->KC}', '{$data->type}', '{$data->base}', '{$data->dec}', '{$data->dt}');";
+                $result = $this->mysqli->query($query);
+                if (!$result) die('Invalid INSERT INTO ' . $data->c . ' query: ' . $this->mysqli->error); //unique
+            }
+        }
+        else {
+            die('Invalid SELECT dt' . $this->mysqli->error);
 		}
 	}
 }
 
+echo "Test";
 $obj = new Database();
 $obj->parse();
 ?>
